@@ -7,6 +7,7 @@ let config_data = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 const prefix = config_data.prefix;
 const admin = config_data.admin_id;
 const chat_token = config_data.chat_token;
+const hm_username = config_data.hm_username;
 
 let last_time = new Date() / 1000;
 
@@ -69,7 +70,7 @@ bot.on("message", msg => {
 						},
 						body: {
 							chat_token: chat_token,
-							username: config_data.hm_username,
+							username: hm_username,
 							[ch_or_te]: target,
 							msg: msg_to_send.join(" ")
 						},
@@ -209,7 +210,7 @@ bot.on("message", msg => {
 
 	if (msg.channel.type == "dm") {
 		let recipient = msg.channel.recipient.username + "#" + msg.channel.recipient.discriminator;
-		if (msg.author.id != "285176698675134465") // the bot id
+		if (msg.author.id != bot.user.id) // the bot id
 			recipient = bot.user.username + "#" + bot.user.discriminator;
 
 		console.log(msg.author.username + "#" + msg.author.discriminator + " => " + recipient + ": " + msg.content);
@@ -251,13 +252,13 @@ function monitorMessages(which_channels, post_where) {
 		body:{
 			chat_token: chat_token,
 			after: last_time,
-			usernames: [config_data.hm_username]	
+			usernames: [hm_username]	
 		},
 		json:true
 	};
 
 	rp(options).then(data => {
-		let ch = data.chats[config_data.hm_username]; // get the message data
+		let ch = data.chats[hm_username]; // get the message data
 		let date, hours, minutes, to_app, message_setup; // init vars
 
 		ch.forEach(chat_message => { // go through each message data
@@ -272,7 +273,7 @@ function monitorMessages(which_channels, post_where) {
 			message_setup = hours + minutes + " " + chat_message.channel + " " + chat_message.from_user + " ::: " + chat_message.msg;
 			
 			// this is a tell, send a dm to me
-			if (chat_message.channel == "[TELL]" || chat_message.msg.match(new RegExp("@" + config_data.hm_username, "g"))) {
+			if (chat_message.channel == "[TELL]" || chat_message.msg.match(new RegExp("@" + hm_username, "g"))) {
 				// fetch user data
 				bot.fetchUser("129416238916042752").then(user => {
 					// create a dm with that user data
@@ -375,7 +376,6 @@ function playVideo(url, msg) {
 		if (url.includes("?t="))
 			time = url.split("?t=").pop();
 		url = ytdl(url, {filter:"audioonly"});
-		console.log(time);
 		const disp = connection.playStream(url, {seek:time, volume:0.25});
 
 		disp.on("error", err => {
