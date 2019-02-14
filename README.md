@@ -22,6 +22,10 @@ Features include:
 - run `get_token.js` to get your hackmud chat token
 - use `config_example.json` to setup your credentials and rename to `config.json`
 
+hackmud API:
+- edit `ads` within `sendAd` function to configure advertisements to send
+- edit `pos_channels` within `send` command to be able to send messages to more channels
+
 ## You need:
 - node
 - npm

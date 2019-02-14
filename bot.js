@@ -26,7 +26,7 @@ bot.on("message", msg => {
 		//ADMIN COMMANDS
 		if (msg.author.id == admin) {
 			switch (com) {
-				case "sendasimp":{
+				case "sendasbot":{
 					let target = msg.content.split(" ")[1];
 					let target_message = msg.content.split(" ").slice(2).join(" ");
 					bot.fetchUser(target).then(user => {
@@ -57,7 +57,7 @@ bot.on("message", msg => {
 					let rp = require("request-promise");
 					let target = msg.content.split(" ")[1];
 					let ch_or_te = "channel";
-					let pos_channels = ["0000", "town", "implink_news_network"];
+					let pos_channels = ["0000"];
 					if (!pos_channels.includes(target))
 						ch_or_te = "tell";
 					let msg_to_send = msg.content.split(" ").slice(2);
@@ -69,7 +69,7 @@ bot.on("message", msg => {
 						},
 						body: {
 							chat_token: chat_token,
-							username: "implink",
+							username: config_data.hm_username,
 							[ch_or_te]: target,
 							msg: msg_to_send.join(" ")
 						},
@@ -169,9 +169,27 @@ bot.on("message", msg => {
 					prefix + "stop - stops the bot from broadcasting audio and leave the current voice channel.",
 					"```"
 				];
-				msg.author.createDM().then(dm => {
-					dm.send(help_dialogue.join("\n"));
-				});
+				let admin_help = [
+					"**ADMIN COMMANDS**",
+					"```",
+					prefix + "sendasbot <user id> <message> - send a direct message to a user via the bot",
+					prefix + "delete <num> - delete an amount of messages",
+					prefix + "send <channel or user> <message> - send a hackmud chats.tell or chats.send message",
+					prefix + "eval <code> - run eval command [DANGEROUS]",
+					prefix + "snowflake <user id> - get snowflake info on a user.",
+					"```"
+				];
+
+				if (msg.author.id == admin)
+					help_dialogue = help_dialogue.concat(admin_help);
+
+				
+				// using msg.reply in case dms are disabled
+				msg.reply(help_dialogue);
+				
+				// msg.author.createDM().then(dm => {
+				// 	dm.send(help_dialogue.join("\n"));
+				// });
 				msg.react("✅");
 				break;
 			}
@@ -233,13 +251,13 @@ function monitorMessages(which_channels, post_where) {
 		body:{
 			chat_token: chat_token,
 			after: last_time,
-			usernames: ["implink"]	
+			usernames: [config_data.hm_username]	
 		},
 		json:true
 	};
 
 	rp(options).then(data => {
-		let ch = data.chats.implink; // get the message data
+		let ch = data.chats[config_data.hm_username]; // get the message data
 		let date, hours, minutes, to_app, message_setup; // init vars
 
 		ch.forEach(chat_message => { // go through each message data
@@ -254,7 +272,7 @@ function monitorMessages(which_channels, post_where) {
 			message_setup = hours + minutes + " " + chat_message.channel + " " + chat_message.from_user + " ::: " + chat_message.msg;
 			
 			// this is a tell, send a dm to me
-			if (chat_message.channel == "[TELL]" || chat_message.msg.match(/@implink|@imp/)) {
+			if (chat_message.channel == "[TELL]" || chat_message.msg.match(new RegExp("@" + config_data.hm_username, "g"))) {
 				// fetch user data
 				bot.fetchUser("129416238916042752").then(user => {
 					// create a dm with that user data
