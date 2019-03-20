@@ -97,7 +97,13 @@ bot.on("message", msg => {
 				case "snowflake": {
 					let sf = msg.content.split(" ").pop();
 					bot.fetchUser(sf).then(user => {
-						msg.reply("Snowflake info for: " + user.username + "#" + user.discriminator +  "```js\n" + JSON.stringify(SnowflakeUtil.deconstruct(sf), null, 2) + "```");
+						msg.reply(
+							"Snowflake info for: " + 
+							user.username + 
+							"#" + user.discriminator + 
+							"```js\n" + 
+							JSON.stringify(SnowflakeUtil.deconstruct(sf), null, 2) + "```"
+						);
 					});
 					break;
 				}
