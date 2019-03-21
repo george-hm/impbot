@@ -1,7 +1,8 @@
 const modDiscord = require("discord.js"); 
 const bot = new modDiscord.Client();
-let fs = require("fs");
+const fs = require("fs");
 const objConfig = JSON.parse(fs.readFileSync("./config.json", "utf8"));
+const modHandler = require("handler.js");
 
 bot.on("ready", () => {
 	console.log("logged in as", bot.user.tag);
