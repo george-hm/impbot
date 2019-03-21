@@ -1,0 +1,14 @@
+{
+	"ping": {
+		"alias": [
+			"p"
+		],
+		"desc": [
+			"usage: {PREFIX}{COMMAND}",
+			"Ping the bot, returns time in milliseconds"
+		],
+		"admin": "false",
+		"on": "message",
+		"args": 0
+	}
+}
