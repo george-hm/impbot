@@ -9,6 +9,6 @@
 		],
 		"admin": "false",
 		"on": "message",
-		"args": 0
+		"args": []
 	}
 }
