@@ -5,24 +5,24 @@ const g_objCommandTemplate = JSON.parse(fs.readFileSync("./command_list.json", "
 
 
 /**
- * finds a command in g_objCommandTemplate and returns it
- * as well as its actual function from modCommandList
+ * finds a command in g_objCommandTemplate and returns it as well as its actual
+ * function from modCommandList
  *
- * @param      {String}    strCommand  The command to try and fetch
- * @param      {Function}  callback    The callback
- * @return     {Promise}   {err, objCommandData, fnCommand}
+ * @param      {String}   strComman  The command to try and fetch
+ * @return     {Promise}  {err, objCommandData, fnCommand}
  */
-function fnFetchCommand(strCommand, callback) {
+function fnFetchCommand(strComman) {
 	return new Promise((resolve, reject) => {
 		//if the command is in g_objCommandTemplate 
 		if (strCommand in g_objCommandTemplate) {
 			// return that command object
 			return resolve(
 				g_objCommandTemplate.strCommand,
-				//return command here
+				modCommandList.strCommand
 			);
 		}
 
+		// find alias
 		// loop through g_objCommandTemplate
 		for (let strKey in g_objCommandTemplate) {
 			// is the alias the command?
@@ -30,7 +30,7 @@ function fnFetchCommand(strCommand, callback) {
 				// return command object
 				return resolve(
 					g_objCommandTemplate.strKey,
-					//return command here
+					modCommandList.strKey
 				);
 			}
 		}
@@ -42,38 +42,42 @@ function fnFetchCommand(strCommand, callback) {
 /**
  * Checks if a message is a command, then runs the command if its valid
  *
- * @param      {String}    strPrefix   The string prefix that the bot uses
- * @param      {String}     strCommand  A message from a user
- * @param      {Function}  callback    The callback
- * @return     {<type>}    { description_of_the_return_value }
+ * @param      {String}   strPrefix  The string prefix that the bot uses
+ * @param      {Object}   objMsg     The object message
+ * @return     {Promise}  { err, fnCommand }
  */
-module.exports.find = (strPrefix, strCommand, callback) => {
-	// check if this a command
-	if (strCommand.includes(strPrefix)) {
-		// get the actual command function from fnFetchCommand	
-		fnFetchCommand(strCommand.split(strPrefix)[1]).then((objCommandData, fnCommand) => {
-			// TODO: check args, pass args, command returns err if wrong args
-			// if wrong args return description (all commands have callback?)
-			// 
-			// need to check if command is on something other than "message"
-			// check if admin etc.
-		}).catch(err => {
-			return err;
-		});
+module.exports.find = (strPrefix, objMsg) => {
+	return new Promise((resolve, reject) => {
+		if (objMsg.content.includes(strPrefix)) {
+			// get the actual command function from fnFetchCommand	
+			fnFetchCommand(objMsg.content.split(strPrefix)[1]).then((objCommandData, fnCommand) => {
+				// is this a function we can use on a message event?
+				if (objCommandData.on != "message")
+					return resolve();
 
+				// init args
+				let strArgs = objMsg.content.split(strPrefix).slice(2);
+				// create context to pass (this contains our args, we pass objMsg by default)
+				let context = {objMsg: objMsg};
+				// the template args
+				let arrTemplateArgs = objCommandData.args;
+				// go through args and append, if any.
+				for (let i = 0; i < objCommandData.args.length; i++) {
+					if (strArgs[i]) {
+						context[arrTemplateArgs[i]] = strArgs[i]; 
+					}
+				}
 
-
-		// if (modCommandList[Object.keys(objCommandTemplate)[0]]) {
-		// 	if (objCommandTemplate.on == "message") {
-		// 		let objArgs = {};
-		// 		let strMsgSections = strCommand.split(strPrefix)[1].split(" ").slice(1);
-		// 		for (let strElement = 0; strElement <= objCommandTemplate.args; strElement++) {
-		// 			if (objCommandTemplate.args[strElement]) 
-		// 				objArgs[objCommandTemplate.args[strElement]] = strMsgSections[strElement];
-		// 			//TODO scrap this section? add callbacks to all commands so we can handle errors
-		// 		}
-		// 		return modCommandList[Object.keys(objCommandTemplate)[0]](objArgs);	
-		// 	}
-		// }
-	}
+				// return the command
+				return resolve(fnCommand(context));
+				// TODO: check args, pass args, command returns err if wrong args
+				// if wrong args return description (all commands have callback?)
+				// 
+				// need to check if command is on something other than "message"
+				// check if admin etc.
+			}).catch(err => {
+				return reject(err);
+			});
+		}
+	});
 }
