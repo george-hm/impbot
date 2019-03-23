@@ -4,7 +4,7 @@
 			"p"
 		],
 		"desc": [
-			"usage: {PREFIX}{COMMAND}",
+			"usage: {PREFIX}ping {ARGS}",
 			"Ping the bot, returns time in milliseconds"
 		],
 		"admin": "false",
