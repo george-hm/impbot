@@ -10,5 +10,8 @@ bot.on("ready", () => {
 });
 
 bot.on("message", objMsg => {
-	//TODO handle commands 
+	modHandler.find(objMsg, objMsg, bot);
+	//TODO handle commands
 });
+
+bot.login(objConfig.bot_token);
