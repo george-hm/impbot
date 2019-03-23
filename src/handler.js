@@ -14,8 +14,8 @@ const g_objConfig = JSON.parse(fs.readFileSync("./config.json", "utf8"));
 module.exports.find = (strPrefix, objMsg, bot) => {
 	return new Promise((resolve, reject) => {
 		if (objMsg.content.includes(strPrefix)) {
-			// get the actual command function from fnFetchCommand	
-			fnFetchCommand(objMsg.content.split(strPrefix)[1]).then((objCommandData, fnCommand) => {
+			// get the actual command function from fnFetchCommand
+			fnFetchCommand(objMsg.content.split(strPrefix)[1]).then(([objCommandData, fnCommand]) => {
 				// is this a function we can use on a message event?
 				if (objCommandData.on != "message")
 					return resolve();
@@ -38,16 +38,18 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 
 				// return the command
 				fnCommand(context).then(() => {
-
+					objMsg.react("✅");
 				}).catch(err => {
-					if (err == "help") {
-						return resolve(objMsg.reply(
-							objCommandData.description[0].replace("{PREFIX}", g_objConfig.prefix)
+					if (err === "help") {
+						return reject(objMsg.reply(
+							objCommandData.desc[0].replace("{PREFIX}", g_objConfig.prefix)
 							.replace("{ARGS}", objCommandData.args.join(" ")) +
 							"\n" +
-							objCommandData.description[1]
+							objCommandData.desc[1]
 						));	
 					}
+
+					console.log(err);
 				});
 				// TODO: check args, pass args, command returns err if wrong args
 				// if wrong args return description (all commands have callback?)
@@ -55,7 +57,7 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 				// need to check if command is on something other than "message"
 				// check if admin etc.
 			}).catch(err => {
-				return reject(err);
+				return; //console.log(err);
 			});
 		}
 	});
@@ -70,12 +72,14 @@ module.exports.find = (strPrefix, objMsg, bot) => {
  */
 function fnFetchCommand(strCommand) {
 	return new Promise((resolve, reject) => {
-		//if the command is in g_objCommandTemplate 
+		//if the command is in g_objCommandTemplate
 		if (strCommand in g_objCommandTemplate) {
 			// return that command object
 			return resolve(
-				g_objCommandTemplate.strCommand,
-				modCommandList.strCommand
+				[
+					g_objCommandTemplate[strCommand],
+					modCommandList[strCommand]
+				]
 			);
 		}
 
@@ -83,11 +87,13 @@ function fnFetchCommand(strCommand) {
 		// loop through g_objCommandTemplate
 		for (let strKey in g_objCommandTemplate) {
 			// is the alias the command?
-			if (g_objCommandTemplate.strKey.alias == strCommand) {
+			if (g_objCommandTemplate[strKey].alias == strCommand.trim()) {
 				// return command object
 				return resolve(
-					g_objCommandTemplate.strKey,
-					modCommandList.strKey
+					[
+						g_objCommandTemplate[strKey],
+						modCommandList[strKey]
+					]
 				);
 			}
 		}
