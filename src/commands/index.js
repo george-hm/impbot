@@ -1,1 +1,3 @@
-module.exports.ping = require("./ping.js");
+const modPing = require("./ping.js");
+
+module.exports.ping = modPing.ping
