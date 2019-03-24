@@ -10,5 +10,29 @@
 		"admin": "false",
 		"on": "message",
 		"args": []
+	},
+	"avatar": {
+		"alias": [
+			"ava"
+		],
+		"desc": [
+			"usage: {PREFIX}avatar {ARGS}"
+		],
+		"admin": "false",
+		"on": "message",
+		"args": ["[@mention or user ID]"]
+	},
+	"uptime": {
+		"alias": [
+			"up",
+			"upt"
+		],
+		"desc": [
+			"usage: {PREFIX}uptime {ARGS}",
+			"Returns the uptime of the bot"
+		],
+		"admin": "false",
+		"on": "message",
+		"args": []
 	}
 }
