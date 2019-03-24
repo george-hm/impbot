@@ -36,5 +36,19 @@
 		"admin": "false",
 		"on": "message",
 		"args": {}
+	},
+	"help": {
+		"alias": [
+			"h"
+		],
+		"desc": [
+		 	"usage: {PREFIX}help {ARGS}",
+		 	"Returns help message of all commands or of a specific command"
+		],
+		"admin": "false",
+		"on": "message",
+		"args": {
+			"command": "[command name]"
+		}
 	}
 }
