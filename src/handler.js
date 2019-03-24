@@ -95,10 +95,10 @@ function fnFetchCommand(strCommand) {
 
 
 /**
- * { function_description }
+ * Returns the help dialogue of a command 
  *
- * @param      {<type>}  objCommandData  The object command data
- * @return     {<type>}  { description_of_the_return_value }
+ * @param      {Object}  objCommandData  Used to fetch the descriptions
+ * @return     
  */
 function fnCommandHelp(objCommandData) {
 	let strDescToReplace = objCommandData.desc[0];
@@ -116,11 +116,11 @@ function fnCommandHelp(objCommandData) {
 
 
 /**
- * { function_description }
+ * Adds all args to context, if applicable
  *
- * @param      {<type>}  strArgs         The string arguments
- * @param      {<type>}  objCommandData  The object command data
- * @param      {<type>}  context         The context
+ * @param      {String}  strArgs         A message to extract args from
+ * @param      {Object}  objCommandData  The object to check for args
+ * @param      {Object}  context         The context to append args to
  */
 function fnAssembleArgs(strMsgContent, objCommandData, context) {
 	strMsgContent = strMsgContent.split(" ").slice(1);
