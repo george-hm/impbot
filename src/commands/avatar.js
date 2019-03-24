@@ -3,7 +3,6 @@ module.exports.avatar = (context) => {
 		if (!context.objMsg || !context.bot)
 			return reject("help");
 
-		console.log(Object.keys(context));
 		let strAvatarURL;
 		if (!context.target) {
 			strAvatarURL = context.objMsg.author.avatarURL;
