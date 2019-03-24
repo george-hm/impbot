@@ -82,7 +82,7 @@ function fnFetchCommand(strCommand) {
 		// loop through g_objCommandTemplate
 		for (let strKey in g_objCommandTemplate) {
 			// is the alias the command?
-			if (g_objCommandTemplate[strKey].alias == strCommand.trim()) {
+			if (g_objCommandTemplate[strKey].alias.includes(strCommand)) {
 				// return command object
 				return resolve(
 					[
