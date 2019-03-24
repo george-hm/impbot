@@ -41,12 +41,7 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 					objMsg.react("✅");
 				}).catch(err => {
 					if (err === "help") {
-						return reject(objMsg.reply(
-							objCommandData.desc[0].replace("{PREFIX}", g_objConfig.prefix)
-							.replace("{ARGS}", objCommandData.args.join(" ")) +
-							"\n" +
-							objCommandData.desc[1]
-						));	
+						return reject(fnCommandHelp(objCommandData));
 					}
 
 					console.log(err);
@@ -99,4 +94,14 @@ function fnFetchCommand(strCommand) {
 		}
 		return reject("Command not found");
 	});
+}
+
+function fnCommandHelp(objCommandData) {
+	let strDescToReplace = objCommandData.desc[0];
+	strDescToReplace.replace("{PREFIX}", g_objConfig.prefix);
+	strDescToReplace.replace("{ARGS}", objCommandData.args.join(" "));
+
+	return objMsg.reply(
+		strDescToReplace + "\n" + objCommandData.desc[1]
+	);	
 }
