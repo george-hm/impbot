@@ -9,7 +9,7 @@
 		],
 		"admin": "false",
 		"on": "message",
-		"args": []
+		"args": {}
 	},
 	"avatar": {
 		"alias": [
@@ -20,7 +20,9 @@
 		],
 		"admin": "false",
 		"on": "message",
-		"args": ["[@mention or user ID]"]
+		"args": {
+			"target":"[@mention or user ID]"
+		}
 	},
 	"uptime": {
 		"alias": [
@@ -33,6 +35,6 @@
 		],
 		"admin": "false",
 		"on": "message",
-		"args": []
+		"args": {}
 	}
 }
