@@ -15,13 +15,11 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 	return new Promise((resolve, reject) => {
 		if (objMsg.content.includes(strPrefix)) {
 			// get the actual command function from fnFetchCommand
-			fnFetchCommand(objMsg.content.split(strPrefix)[1]).then(([objCommandData, fnCommand]) => {
+			fnFetchCommand(objMsg.content.split(strPrefix)[1].split(" ")[0]).then(([objCommandData, fnCommand]) => {
 				// is this a function we can use on a message event?
 				if (objCommandData.on != "message")
 					return resolve();
 
-				// init args
-				let strArgs = objMsg.content.split(strPrefix).slice(2);
 				// create context to pass (this contains our args, we pass objMsg by default)
 				let context = {
 					objMsg: objMsg, 
@@ -29,12 +27,9 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 				};
 				// the template args
 				let arrTemplateArgs = objCommandData.args;
-				// go through args and append, if any.
-				for (let i = 0; i < objCommandData.args.length; i++) {
-					if (strArgs[i]) {
-						context[arrTemplateArgs[i]] = strArgs[i]; 
-					}
-				}
+				
+				context = fnAssembleArgs(objMsg.content, objCommandData, context);
+
 
 				// return the command
 				fnCommand(context).then(() => {
@@ -55,6 +50,8 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 				return; //console.log(err);
 			});
 		}
+
+		return;
 	});
 }
 
@@ -96,12 +93,41 @@ function fnFetchCommand(strCommand) {
 	});
 }
 
+
+/**
+ * { function_description }
+ *
+ * @param      {<type>}  objCommandData  The object command data
+ * @return     {<type>}  { description_of_the_return_value }
+ */
 function fnCommandHelp(objCommandData) {
 	let strDescToReplace = objCommandData.desc[0];
 	strDescToReplace.replace("{PREFIX}", g_objConfig.prefix);
-	strDescToReplace.replace("{ARGS}", objCommandData.args.join(" "));
+	let arrArgs = [];
+	for (let strArg in objCommandData) {
+		arrArgs.push(objCommandData[strArg]);
+	}
+	strDescToReplace.replace("{ARGS}", arrArgs.join(" "));
 
 	return objMsg.reply(
 		strDescToReplace + "\n" + objCommandData.desc[1]
 	);	
+}
+
+
+/**
+ * { function_description }
+ *
+ * @param      {<type>}  strArgs         The string arguments
+ * @param      {<type>}  objCommandData  The object command data
+ * @param      {<type>}  context         The context
+ */
+function fnAssembleArgs(strMsgContent, objCommandData, context) {
+	strMsgContent = strMsgContent.split(" ").slice(1);
+	console.log(Object.keys(objCommandData.args));
+	for (let strArg = 0; strArg < strMsgContent.length; strArg++) {
+		context[Object.keys(objCommandData.args)[strArg]] = strMsgContent[strArg];
+	}
+
+	return context;
 }
