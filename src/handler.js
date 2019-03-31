@@ -13,7 +13,7 @@ const g_objConfig = JSON.parse(fs.readFileSync("./config.json", "utf8"));
  */
 module.exports.find = (strPrefix, objMsg, bot) => {
 	return new Promise((resolve, reject) => {
-		if (objMsg.content.includes(strPrefix)) {
+		if (objMsg.content.startsWith(strPrefix)) {
 			// get the actual command function from fnFetchCommand
 			fnFetchCommand(objMsg.content.split(strPrefix)[1].split(" ")[0]).then(([objCommandData, fnCommand]) => {
 				// is this a function we can use on a message event?
@@ -23,7 +23,8 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 				// create context to pass (this contains our args, we pass objMsg by default)
 				let context = {
 					objMsg: objMsg, 
-					bot: bot
+					bot: bot,
+					objCommandTemplate: g_objCommandTemplate
 				};
 				// the template args
 				let arrTemplateArgs = objCommandData.args;

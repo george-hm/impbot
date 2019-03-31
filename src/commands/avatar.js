@@ -16,6 +16,5 @@ module.exports.avatar = (context) => {
 				return reject(err);
 			});
 		}
-
 	});
 }
