@@ -16,7 +16,8 @@
 			"ava"
 		],
 		"desc": [
-			"usage: {PREFIX}avatar {ARGS}"
+			"usage: {PREFIX}avatar {ARGS}",
+			"returns a user or your avatar URL"
 		],
 		"admin": "false",
 		"on": "message",
