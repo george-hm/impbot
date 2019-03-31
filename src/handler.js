@@ -24,7 +24,8 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 				let context = {
 					objMsg: objMsg, 
 					bot: bot,
-					objCommandTemplate: g_objCommandTemplate
+					objCommandTemplate: g_objCommandTemplate,
+					objConfig: g_objConfig
 				};
 				// the template args
 				let arrTemplateArgs = objCommandData.args;
