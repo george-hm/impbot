@@ -2,7 +2,7 @@
  * returns help of call commands or only one command
  *
  * @param      {Object}   context  The context
- * @return     {Promise}  { description_of_the_return_value }
+ * @return     {Promise}  
  */
 module.exports = (context) => {
 	return new Promise((resolve, reject) => {
@@ -51,7 +51,8 @@ module.exports = (context) => {
  * Returns the help dialogue of a command (uses objMsg.reply)
  *
  * @param      {Object}  objCommandData  Used to fetch the descriptions
- * @return     
+ * @param      {String}  prefix          The bot prefix
+ * @return     {String}  Command information
  */
 function fnCommandHelp(objCommandData, prefix) {
 	// add arguments to strArguments

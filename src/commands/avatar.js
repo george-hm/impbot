@@ -1,3 +1,9 @@
+/**
+ * Returns the users or a users avatar
+ *
+ * @param      {object}   context  The context, we get various info form here
+ * @return     {Promise}  
+ */
 module.exports = (context) => {
 	return new Promise((resolve, reject) => {
 		if (!context.objMsg || !context.bot)
