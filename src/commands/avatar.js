@@ -1,4 +1,4 @@
-module.exports.avatar = (context) => {
+module.exports = (context) => {
 	return new Promise((resolve, reject) => {
 		if (!context.objMsg || !context.bot)
 			return reject("help");

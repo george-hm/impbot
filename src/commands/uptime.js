@@ -4,7 +4,7 @@
  * @param      {Object}   context  { objMsg, bot }
  * @return     {Promise}  
  */
-module.exports.uptime = (context) => {
+module.exports = (context) => {
 	return new Promise((resolve, reject) => {
 		if (!context.objMsg || !context.bot)
 			return reject("help");

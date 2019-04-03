@@ -4,7 +4,7 @@
  * @param      {<type>}   context  The context
  * @return     {Promise}  { description_of_the_return_value }
  */
-module.exports.help = (context) => {
+module.exports = (context) => {
 	return new Promise((resolve, reject) => {
 		if (!context.objCommandTemplate) {
 			return reject("Missing required data context.objCommandTemplate");
