@@ -1,5 +1,3 @@
-
-
 /**
  * returns help of call commands or only one command
  *
@@ -26,7 +24,7 @@ module.exports.help = (context) => {
 			"COMMANDS:"
 		]
 		for (let strCommand in context.objCommandTemplate) {
-			let strComHelp = fnCommandHelp(context.objCommandTemplate[strCommand], context.objConfig, true);
+			let strComHelp = fnCommandHelp(context.objCommandTemplate[strCommand], context.prefix, true);
 
 			arrCommandHelpSummary.push(
 				strCommand + " usage:\n" +
@@ -46,13 +44,12 @@ module.exports.help = (context) => {
  * @param      {Object}  objCommandData  Used to fetch the descriptions
  * @return     
  */
-function fnCommandHelp(objCommandData, objConfig, desc_only) {
-	console.log(objConfig);
+function fnCommandHelp(objCommandData, prefix, desc_only) {
 	if (desc_only) {
 		return objCommandData.desc[1];
 	}
 	let strDescToReplace = objCommandData.desc[0];
-	strDescToReplace.replace("{PREFIX}", objConfig.prefix);
+	strDescToReplace.replace("{PREFIX}", prefix);
 	let arrArgs = [];
 	for (let strArg in objCommandData) {
 		arrArgs.push(objCommandData[strArg]);

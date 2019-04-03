@@ -25,7 +25,7 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 					objMsg: objMsg, 
 					bot: bot,
 					objCommandTemplate: g_objCommandTemplate,
-					objConfig: g_objConfig
+					prefix: g_objConfig.prefix
 				};
 				// the template args
 				let arrTemplateArgs = objCommandData.args;
@@ -126,7 +126,6 @@ function fnCommandHelp(objCommandData) {
  */
 function fnAssembleArgs(strMsgContent, objCommandData, context) {
 	strMsgContent = strMsgContent.split(" ").slice(1);
-	console.log(Object.keys(objCommandData.args));
 	for (let strArg = 0; strArg < strMsgContent.length; strArg++) {
 		context[Object.keys(objCommandData.args)[strArg]] = strMsgContent[strArg];
 	}
