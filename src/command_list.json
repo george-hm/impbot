@@ -4,7 +4,7 @@
 			"p"
 		],
 		"desc": [
-			"usage: {PREFIX}ping {ARGS}",
+			"{PREFIX}ping {ARGS}",
 			"Ping the bot, returns time in milliseconds"
 		],
 		"admin": "false",
@@ -16,7 +16,7 @@
 			"ava"
 		],
 		"desc": [
-			"usage: {PREFIX}avatar {ARGS}",
+			"{PREFIX}avatar {ARGS}",
 			"returns a user or your avatar URL"
 		],
 		"admin": "false",
@@ -31,7 +31,7 @@
 			"upt"
 		],
 		"desc": [
-			"usage: {PREFIX}uptime {ARGS}",
+			"{PREFIX}uptime {ARGS}",
 			"Returns the uptime of the bot"
 		],
 		"admin": "false",
@@ -43,7 +43,7 @@
 			"h"
 		],
 		"desc": [
-		 	"usage: {PREFIX}help {ARGS}",
+		 	"{PREFIX}help {ARGS}",
 		 	"Returns help message of all commands or of a specific command"
 		],
 		"admin": "false",
