@@ -1,3 +1,5 @@
+const chat_pass = "ENTER_CHAT_PASS_HERE"
+
 let rp = require("request-promise");
 
 let options = {
@@ -6,7 +8,7 @@ let options = {
 	headers:{
 		"Content-Type": "application/json"
 	},
-	body: {"pass":"get chat_pass from game"},
+	body: {"pass":chat_pass},
 	json:true
 };
 
