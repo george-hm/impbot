@@ -103,18 +103,24 @@ function fnFetchCommand(strCommand) {
  * @return     
  */
 function fnCommandHelp(objCommandData) {
-	let strDescToReplace = objCommandData.desc[0];
-	strDescToReplace.replace("{PREFIX}", g_objConfig.prefix);
-	let arrArgs = [];
-	for (let strArg in objCommandData) {
-		arrArgs.push(objCommandData[strArg]);
-	}
-	strDescToReplace.replace("{ARGS}", arrArgs.join(" "));
+	// add arguments to strArguments
+	let strArguments = "";
+	Object.keys(objCommandData.args).forEach(arg => {
+		strArguments += objCommandData.args[arg];
+	});
+	let strFirstDesc = objCommandData.desc[0]
+		.replace("{PREFIX}", g_objConfig.prefix)
+		.replace("{ARGS}", strArguments);
 
-	return objMsg.reply(
-		strDescToReplace + "\n" + objCommandData.desc[1]
-	);	
+	let arrRetFormat = [
+		"alias(es):\n\t" + objCommandData.alias.join(" "),
+		"\nusage:\n\t" + strFirstDesc,
+		"\nDescription:\n" + objCommandData.desc[1]
+	];
+
+	return arrRetFormat.join("\n");
 }
+
 
 
 /**
