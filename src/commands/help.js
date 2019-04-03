@@ -1,7 +1,7 @@
 /**
  * returns help of call commands or only one command
  *
- * @param      {<type>}   context  The context
+ * @param      {Object}   context  The context
  * @return     {Promise}  { description_of_the_return_value }
  */
 module.exports = (context) => {
@@ -13,22 +13,31 @@ module.exports = (context) => {
 		if (context.command) {
 			let objCommandData = context.objCommandTemplate[context.command];
 			if (objCommandData) {
-				return resolve(context.objMsg.reply(fnCommandHelp(objCommandData, context.objConfig)));
+				let strRetMsg = [
+					"```md", 
+					"- " + context.command + ":",
+					fnCommandHelp(objCommandData, context.prefix),
+					"```"
+				].join("\n");
+
+				return resolve(context.objMsg.reply(strRetMsg));
 			}
 
 			return resolve(context.objMsg.reply("Command does not exist."));
 		}
 
 		let arrCommandHelpSummary = [
+			"**COMMANDS:**",
 			"```md",
-			"COMMANDS:"
+			"####################\n"
 		]
 		for (let strCommand in context.objCommandTemplate) {
-			let strComHelp = fnCommandHelp(context.objCommandTemplate[strCommand], context.prefix, true);
+			let strComHelp = fnCommandHelp(context.objCommandTemplate[strCommand], context.prefix);
 
 			arrCommandHelpSummary.push(
-				strCommand + " usage:\n" +
-				"- " + strComHelp + "\n"
+				"- " + strCommand + 
+				":\n" + strComHelp + 
+				"\n\n####################\n"
 			);
 		}
 		arrCommandHelpSummary.push("```");
@@ -44,18 +53,22 @@ module.exports = (context) => {
  * @param      {Object}  objCommandData  Used to fetch the descriptions
  * @return     
  */
-function fnCommandHelp(objCommandData, prefix, desc_only) {
-	if (desc_only) {
-		return objCommandData.desc[1];
-	}
-	let strDescToReplace = objCommandData.desc[0];
-	strDescToReplace.replace("{PREFIX}", prefix);
-	let arrArgs = [];
-	for (let strArg in objCommandData) {
-		arrArgs.push(objCommandData[strArg]);
-	}
-	strDescToReplace.replace("{ARGS}", arrArgs.join(" "));
+function fnCommandHelp(objCommandData, prefix) {
+	// add arguments to strArguments
+	let strArguments = "";
+	Object.keys(objCommandData.args).forEach(arg => {
+		strArguments += objCommandData.args[arg];
+	});
+	let strFirstDesc = objCommandData.desc[0]
+		.replace("{PREFIX}", prefix)
+		.replace("{ARGS}", strArguments);
 
-	return strDescToReplace + "\n" + objCommandData.desc[1];	
+	let arrRetFormat = [
+		"alias(es):\n\t" + objCommandData.alias.join(" "),
+		"\nusage:\n\t" + strFirstDesc,
+		"\nDescription:\n" + objCommandData.desc[1]
+	];
+
+	return arrRetFormat.join("\n");
 }
 
