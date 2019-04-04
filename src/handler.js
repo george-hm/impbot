@@ -20,6 +20,9 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 				if (objCommandData.on != "message")
 					return resolve();
 
+				if (objCommandData.admin === true && !g_objConfig.admins.includes(objMsg.author.id)) {
+					return resolve(objMsg.reply("I'm afraid I can't let you do that Dave."))
+				}
 				// create context to pass (this contains our args, we pass objMsg by default)
 				let context = {
 					objMsg: objMsg, 
@@ -38,7 +41,12 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 					objMsg.react("✅");
 				}).catch(err => {
 					if (err === "help") {
-						return reject(fnCommandHelp(objCommandData));
+						let strComHelp = [
+							"Something went wrong trying to run your command, see the help: ```md",
+							fnCommandHelp(objCommandData),
+							"```"
+						].join("\n");
+						return reject(objMsg.reply(strComHelp));
 					}
 
 					console.log(err);
