@@ -22,7 +22,7 @@
 		"admin": "false",
 		"on": "message",
 		"args": {
-			"target":"[@mention or user ID]"
+			"target":"[@mention_or_user ID]"
 		}
 	},
 	"uptime": {
@@ -49,7 +49,22 @@
 		"admin": "false",
 		"on": "message",
 		"args": {
-			"command": "[command name]"
+			"command": "[command_name]"
+		}
+	},
+	"eval": {
+		"alias": [
+			"ev",
+			"eva"
+		],
+		"desc": [
+			"{PREFIX}eval {ARGS}",
+			"Runs the JavaScript eval command [DANGEROUS]"
+		],
+		"admin": "true",
+		"on": "message",
+		"args": {
+			"code": "code_to_execute"
 		}
 	}
 }
