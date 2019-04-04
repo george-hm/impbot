@@ -2,12 +2,14 @@ const uptime = require("./uptime");
 const ping   = require("./ping");
 const avatar = require("./avatar");
 const help   = require("./help");
+const eval_command = require("./eval.js");
 
 let objComands = {
 	"uptime": uptime,
 	"ping"  : ping,
 	"avatar": avatar,
-	"help"  : help
+	"help"  : help,
+	"eval"  : eval_command
 }
 
 for (let command in objComands) {
