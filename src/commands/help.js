@@ -56,10 +56,11 @@ module.exports = (context) => {
  */
 function fnCommandHelp(objCommandData, prefix) {
 	// add arguments to strArguments
-	let strArguments = "";
+	let strArguments = [];
 	Object.keys(objCommandData.args).forEach(arg => {
-		strArguments += objCommandData.args[arg];
+		strArguments.push(objCommandData.args[arg]);
 	});
+	strArguments = strArguments.join(", ")
 	let strFirstDesc = objCommandData.desc[0]
 		.replace("{PREFIX}", prefix)
 		.replace("{ARGS}", strArguments);
