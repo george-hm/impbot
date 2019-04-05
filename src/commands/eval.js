@@ -3,11 +3,6 @@ module.exports = (context) => {
 		if (!context.code) {
 			return reject("help");
 		}
-		let arrRetMsg = [
-			"**EVAL OUTPUT:**```js",
-			"[EVAL]",
-			"```"
-		];
 		let ev;
 		try {
 			ev = eval(context.code);
@@ -15,8 +10,12 @@ module.exports = (context) => {
 		catch(e) {
 			ev = e;
 		}
+		let arrRetMsg = [
+			"**EVAL OUTPUT:**```js",
+			ev,
+			"```"
+		];
 
-		arrRetMsg[1] = ev;
 		return resolve(context.objMsg.reply(arrRetMsg.join("\n")));
 	});
 }
