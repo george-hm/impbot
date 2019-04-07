@@ -7,7 +7,7 @@
 			"{PREFIX}ping {ARGS}",
 			"Ping the bot, returns time in milliseconds"
 		],
-		"admin": "false",
+		"admin": false,
 		"on": "message",
 		"args": {}
 	},
@@ -19,7 +19,7 @@
 			"{PREFIX}avatar {ARGS}",
 			"returns a user or your avatar URL"
 		],
-		"admin": "false",
+		"admin": false,
 		"on": "message",
 		"args": {
 			"target":"[@mention_or_user ID]"
@@ -34,7 +34,7 @@
 			"{PREFIX}uptime {ARGS}",
 			"Returns the uptime of the bot"
 		],
-		"admin": "false",
+		"admin": false,
 		"on": "message",
 		"args": {}
 	},
@@ -46,7 +46,7 @@
 		 	"{PREFIX}help {ARGS}",
 		 	"Returns help message of all commands or of a specific command"
 		],
-		"admin": "false",
+		"admin": false,
 		"on": "message",
 		"args": {
 			"command": "[command_name]"
@@ -61,7 +61,7 @@
 			"{PREFIX}eval {ARGS}",
 			"Runs the JavaScript eval command [DANGEROUS]"
 		],
-		"admin": "true",
+		"admin": true,
 		"on": "message",
 		"args": {
 			"code": "code_to_execute"
@@ -75,7 +75,7 @@
 			"{PREFIX}botsend {ARGS}",
 			"Send a message to a channel or user as the bot"
 		],
-		"admin": "true",
+		"admin": true,
 		"on": "message",
 		"args": {
 			"target": "target",
