@@ -20,8 +20,25 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 				if (objCommandData.on != "message")
 					return resolve();
 
-				if (objCommandData.admin === true && !g_objConfig.admins.includes(objMsg.author.id)) {
-					return resolve(objMsg.reply("I'm afraid I can't let you do that Dave."))
+				// log data if an admin command is ran, also deny non-admins
+				if (objCommandData.admin == true) {
+					let bIsAdmin = g_objConfig.admins.includes(objMsg.author.id)
+
+					bot.db.collection("admin_log").insertOne(
+						{
+							admin: g_objConfig.admins.includes(objMsg.author.id),
+							user_id: objMsg.author.id,
+							username: objMsg.author.username,
+							discrim: objMsg.author.discriminator,
+							command: objCommandData.desc[1].replace("{PREFIX}").replace(" {ARGS}"),
+							where: objMsg.channel,
+							timestamp: Date.now()
+						}
+					);
+
+					if (!isAdmin) {
+						return resolve(objMsg.react("⛔"));
+					}	
 				}
 				// create context to pass (this contains our args, we pass objMsg by default)
 				let context = {

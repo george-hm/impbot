@@ -73,4 +73,3 @@ function fnCommandHelp(objCommandData, prefix) {
 
 	return arrRetFormat.join("\n");
 }
-
