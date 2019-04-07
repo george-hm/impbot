@@ -163,3 +163,35 @@ function fnAssembleArgs(strMsgContent, objCommandData, context) {
 
 	return context;
 }
+
+/**
+ * check if user is admin and log data
+ *
+ * @param      {Array}    arrAdmins       Array containing admin ids
+ * @param      {Object}   objMsg          Object message from discord
+ * @param      {Object}   objCommandData  Command data containing desc etc.
+ * @param      {Object}   bot             The bot instance
+ * @return     {boolean}  true if admin, false if not
+ */
+function fnCheckAdmin(arrAdmins, objMsg, objCommandData, bot) {
+
+	let bIsAdmin = arrAdmins.includes(objMsg.author.id)
+
+	bot.db.collection("admin_log").insertOne(
+		{
+			admin: bIsAdmin,
+			user_id: objMsg.author.id,
+			username: objMsg.author.username,
+			discriminator: objMsg.author.discriminator,
+			command: objCommandData.desc[0].replace("{PREFIX}", "").replace(" {ARGS}", ""),
+			// where: objMsg.channel,
+			timestamp: Date.now()
+		}
+	);
+
+	if (!bIsAdmin) {
+		return false;
+	}
+
+	return true;
+}
