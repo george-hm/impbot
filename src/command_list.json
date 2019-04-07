@@ -66,5 +66,20 @@
 		"args": {
 			"code": "code_to_execute"
 		}
+	},
+	"botsend": {
+		"alias": [
+			"sendasbot"
+		],
+		"desc": [
+			"{PREFIX}botsend {ARGS}",
+			"Send a message to a channel or user as the bot"
+		],
+		"admin": "true",
+		"on": "message",
+		"args": {
+			"target": "target",
+			"message": "message"
+		}
 	}
 }
