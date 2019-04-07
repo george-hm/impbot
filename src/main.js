@@ -24,9 +24,9 @@ bot.on("message", objMsg => {
 			{
 				user_id: objMsg.author.id,
 				username: objMsg.author.username,
-				discrim: objMsg.author.discriminator,
+				discriminator: objMsg.author.discriminator,
 				message: objMsg.content,
-				where: objMsg.channel,
+				// where: objMsg.channel,
 				timestamp: Date.now()
 			}
 		);
