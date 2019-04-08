@@ -10,15 +10,13 @@ module.exports = (context) => {
 				if (!user) {
 					return err;
 				}
-				console.log(22)
 				return resolve(user.send(context.message));
 			}
-			console.log(user);
+			
 			user.createDM().then(dmChannel => {
 				return resolve(dmChannel.send(context.message));
 			});
 		}).catch(err => {
-			console.log(11);
 			if (err.message === "Unknown User") {
 				let channel = context.bot.channels.get(context.target);
 				if (!channel || !channel.send) {

@@ -18,7 +18,8 @@ bot.on("ready", () => {
 });
 
 bot.on("message", objMsg => {
-	if (bot.user.id == objMsg.author.id) {
+	// ignore everything coming from a bot
+	if (objMsg.author.bot) {
 		return;
 	}
 
