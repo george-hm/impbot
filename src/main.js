@@ -18,7 +18,7 @@ bot.on("ready", () => {
 });
 
 bot.on("message", objMsg => {
-	if (client.user.id == objMsg.author.id) {
+	if (bot.user.id == objMsg.author.id) {
 		return;
 	}
 
