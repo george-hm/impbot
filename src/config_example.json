@@ -4,5 +4,8 @@
 	"admin_id":"EXAMPLE",
 	"prefix":"EXAMPLE",
 	"g_api_key":"EXAMPLE",
-	"hm_username":"EAMPLE"
+	"hm_username":"EAMPLE",
+	"db_host": "mongodb://localhost:27017",
+	"db_name": "EXAMPLE"
+
 }
