@@ -1,4 +1,4 @@
-const modDiscord = require("discord.js"); 
+const modDiscord = require("discord.js");
 const bot = new modDiscord.Client();
 const fs = require("fs");
 const objConfig = JSON.parse(fs.readFileSync("./config.json", "utf8"));
@@ -15,10 +15,13 @@ modMongo.connect(objConfig.db_host, {useNewUrlParser:true}).then(client => {
 bot.on("ready", () => {
 	console.log("logged in as", bot.user.tag);
 	bot.user.setActivity(objConfig.prefix + "help");
-
 });
 
 bot.on("message", objMsg => {
+	if (client.user.id == objMsg.author.id) {
+		return;
+	}
+
 	if (bot.db) {
 		bot.db.collection("discord_chats").insertOne(
 			{
@@ -26,7 +29,7 @@ bot.on("message", objMsg => {
 				username: objMsg.author.username,
 				discriminator: objMsg.author.discriminator,
 				message: objMsg.content,
-				// where: objMsg.channel,
+				where: objMsg.channel.id,
 				timestamp: Date.now()
 			}
 		);

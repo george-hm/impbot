@@ -182,7 +182,7 @@ function fnCheckAdmin(arrAdmins, objMsg, objCommandData, bot) {
 			username: objMsg.author.username,
 			discriminator: objMsg.author.discriminator,
 			command: objCommandData.desc[0].replace("{PREFIX}", "").replace(" {ARGS}", ""),
-			// where: objMsg.channel,
+			where: objMsg.channel.id,
 			timestamp: Date.now()
 		}
 	);
