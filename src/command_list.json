@@ -81,5 +81,19 @@
 			"target": "target",
 			"message": "message"
 		}
+	},
+	"snowflake": {
+		"alias": [
+			"sf", "snowflakeinfo"
+		],
+		"desc": [
+			"{PREFIX}snowflake {ARGS}",
+			"Returns the snowflake info on a user ID"
+		],
+		"admin": true,
+		"on": "message",
+		"args": {
+			"target": "user_id"
+		}
 	}
 }
