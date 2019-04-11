@@ -121,25 +121,28 @@ function fnFetchCommand(strCommand) {
 
 
 /**
- * Returns the help dialogue of a command 
+ * Returns the help dialogue of a command
  *
  * @param      {Object}  objCommandData  Used to fetch the descriptions
- * @return     
+ * @return
  */
 function fnCommandHelp(objCommandData) {
 	// add arguments to strArguments
 	let strArguments = "";
 	Object.keys(objCommandData.args).forEach(arg => {
-		strArguments += objCommandData.args[arg];
+		strArguments += (objCommandData.args[arg]) + ", ";
 	});
-	let strFirstDesc = objCommandData.desc[0]
-		.replace("{PREFIX}", g_objConfig.prefix)
-		.replace("{ARGS}", strArguments);
+	strArguments = strArguments.slice(0, -2);
+
+	let strUsage =  g_objConfig.prefix +
+		objCommandData.name +
+		" " +
+		strArguments;
 
 	let arrRetFormat = [
-		"alias(es):\n\t" + objCommandData.alias.join(" "),
-		"\nusage:\n\t" + strFirstDesc,
-		"\nDescription:\n" + objCommandData.desc[1]
+		"alias(es):\n\t" + objCommandData.alias.join(", "),
+		"\nusage:\n\t" + strUsage,
+		"\nDescription:\n\t" + objCommandData.desc
 	];
 
 	return arrRetFormat.join("\n");
@@ -181,9 +184,9 @@ function fnCheckAdmin(arrAdmins, objMsg, objCommandData, bot) {
 			user_id: objMsg.author.id,
 			username: objMsg.author.username,
 			discriminator: objMsg.author.discriminator,
-			command: objCommandData.desc[0].replace("{PREFIX}", "").replace(" {ARGS}", ""),
+			command: objCommandData.name,
 			where: objMsg.channel.id,
-			timestamp: Date.now()
+			timestamp: bot.timestamp
 		}
 	);
 

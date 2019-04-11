@@ -25,6 +25,9 @@ bot.on("message", objMsg => {
 		return;
 	}
 
+	// unix timestamp, ending in seconds
+	bot.timestamp = Math.floor(Date.now() / 1000);
+
 	if (bot.db) {
 		bot.db.collection("discord_chats").insertOne(
 			{

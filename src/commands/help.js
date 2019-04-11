@@ -14,8 +14,8 @@ module.exports = (context) => {
 			let objCommandData = context.objCommandTemplate[context.command];
 			if (objCommandData) {
 				let strRetMsg = [
-					"```md",
-					"- " + context.command + ":",
+					"```diff",
+					"+ " + context.command,
 					fnCommandHelp(objCommandData, context.prefix),
 					"```"
 				].join("\n");
@@ -80,7 +80,7 @@ function fnCommandHelp(objCommandData, prefix, short) {
 		strRet = [
 			"alias(es):\n\t" + objCommandData.alias.join(", "),
 			"\nusage:\n\t" + strUsage,
-			"\nDescription:\n" + objCommandData.desc
+			"\nDescription:\n\t" + objCommandData.desc
 		].join("\n");
 
 	}
