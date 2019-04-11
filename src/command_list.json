@@ -1,99 +1,94 @@
 {
 	"ping": {
+		"on": "message",
 		"alias": [
 			"p"
 		],
-		"desc": [
-			"{PREFIX}ping {ARGS}",
-			"Ping the bot, returns time in milliseconds"
-		],
+		"name": "ping",
+		"desc":	"Ping the bot, returns time in milliseconds",
 		"admin": false,
-		"on": "message",
 		"args": {}
 	},
 	"avatar": {
+		"on": "message",
 		"alias": [
 			"ava"
 		],
-		"desc": [
-			"{PREFIX}avatar {ARGS}",
-			"returns a user or your avatar URL"
-		],
+		"name": "avatar",
+		"desc":	"Returns a user or your avatar URL",
 		"admin": false,
-		"on": "message",
 		"args": {
 			"target":"[@mention_or_user ID]"
 		}
 	},
 	"uptime": {
+		"on": "message",
 		"alias": [
 			"up",
 			"upt"
 		],
-		"desc": [
-			"{PREFIX}uptime {ARGS}",
-			"Returns the uptime of the bot"
-		],
+		"name": "uptime",
+		"desc":	"Returns the uptime of the bot",
 		"admin": false,
-		"on": "message",
 		"args": {}
 	},
 	"help": {
+		"on": "message",
 		"alias": [
 			"h"
 		],
-		"desc": [
-		 	"{PREFIX}help {ARGS}",
-		 	"Returns help message of all commands or of a specific command"
-		],
+		 "name": "help",
+		"desc": "Returns help message of all commands or of a specific command",
 		"admin": false,
-		"on": "message",
 		"args": {
 			"command": "[command_name]"
 		}
 	},
 	"eval": {
+		"on": "message",
 		"alias": [
 			"ev",
 			"eva"
 		],
-		"desc": [
-			"{PREFIX}eval {ARGS}",
-			"Runs the JavaScript eval command [DANGEROUS]"
-		],
+		"name": "eval",
+		"desc":	"Runs the JavaScript eval command [DANGEROUS]",
 		"admin": true,
-		"on": "message",
 		"args": {
 			"code": "code_to_execute"
 		}
 	},
 	"botsend": {
+		"on": "message",
 		"alias": [
 			"sendasbot"
 		],
-		"desc": [
-			"{PREFIX}botsend {ARGS}",
-			"Send a message to a channel or user as the bot"
-		],
+		"name": "botsend",
+		"desc":	"Send a message to a channel or user as the bot",
 		"admin": true,
-		"on": "message",
 		"args": {
 			"target": "target",
 			"message": "message"
 		}
 	},
 	"snowflake": {
-		"alias": [
-			"sf", "snowflakeinfo"
-		],
-		"desc": [
-			"{PREFIX}snowflake {ARGS}",
-			"Returns the snowflake info on a user ID"
-		],
-		"admin": true,
 		"on": "message",
+		"alias": [
+			"sf",
+			"snowflakeinfo"
+		],
+		"name": "snowflake",
+		"desc":	"Returns the snowflake info on a user ID",
+		"admin": true,
 		"args": {
 			"target": "user_id"
 		}
+	},
+	"hackmud_chats": {
+		"on": "interval",
+		"alias": [],
+		"name": "hackmud_chats",
+		"desc": "Periodically logs hackmud messages from in-game",
+		"admin": true,
+		"args": {}
 	}
 }

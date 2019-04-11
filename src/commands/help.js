@@ -2,7 +2,7 @@
  * returns help of call commands or only one command
  *
  * @param      {Object}   context  The context
- * @return     {Promise}  
+ * @return     {Promise}
  */
 module.exports = (context) => {
 	return new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@ module.exports = (context) => {
 			let objCommandData = context.objCommandTemplate[context.command];
 			if (objCommandData) {
 				let strRetMsg = [
-					"```md", 
+					"```md",
 					"- " + context.command + ":",
 					fnCommandHelp(objCommandData, context.prefix),
 					"```"
@@ -28,16 +28,21 @@ module.exports = (context) => {
 
 		let arrCommandHelpSummary = [
 			"**COMMANDS:**",
-			"```md",
-			"####################\n"
+			"```diff",
 		]
 		for (let strCommand in context.objCommandTemplate) {
-			let strComHelp = fnCommandHelp(context.objCommandTemplate[strCommand], context.prefix);
+			if (context.objCommandTemplate[strCommand].on != "message") {
+				continue;
+			}
+
+			let strComHelp = fnCommandHelp(
+				context.objCommandTemplate[strCommand],
+				context.prefix,
+				true
+			);
 
 			arrCommandHelpSummary.push(
-				"- " + strCommand + 
-				":\n" + strComHelp + 
-				"\n\n####################\n"
+				"+ " + strComHelp + "\n"
 			);
 		}
 		arrCommandHelpSummary.push("```");
@@ -54,22 +59,31 @@ module.exports = (context) => {
  * @param      {String}  prefix          The bot prefix
  * @return     {String}  Command information
  */
-function fnCommandHelp(objCommandData, prefix) {
+function fnCommandHelp(objCommandData, prefix, short) {
 	// add arguments to strArguments
-	let strArguments = [];
+	let strArguments = "";
 	Object.keys(objCommandData.args).forEach(arg => {
-		strArguments.push(objCommandData.args[arg]);
+		strArguments += (objCommandData.args[arg]) + ", ";
 	});
-	strArguments = strArguments.join(", ")
-	let strFirstDesc = objCommandData.desc[0]
-		.replace("{PREFIX}", prefix)
-		.replace("{ARGS}", strArguments);
+	strArguments = strArguments.slice(0, -2);
 
-	let arrRetFormat = [
-		"alias(es):\n\t" + objCommandData.alias.join(" "),
-		"\nusage:\n\t" + strFirstDesc,
-		"\nDescription:\n" + objCommandData.desc[1]
-	];
+	let strUsage =  prefix +
+		objCommandData.name +
+		" " +
+		strArguments;
 
-	return arrRetFormat.join("\n");
+	let strRet;
+
+	if (short) {
+		strRet = strUsage + "\n\t" + objCommandData.desc;
+	} else {
+		strRet = [
+			"alias(es):\n\t" + objCommandData.alias.join(", "),
+			"\nusage:\n\t" + strUsage,
+			"\nDescription:\n" + objCommandData.desc
+		].join("\n");
+
+	}
+
+	return strRet;
 }

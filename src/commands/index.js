@@ -17,6 +17,6 @@ let objComands = {
 }
 
 for (let command in objComands) {
-	// e.g. module.exports.ping = objComands.ping.ping
+	// e.g. module.exports.ping = objComands.ping
 	module.exports[command] = objComands[command]
 }

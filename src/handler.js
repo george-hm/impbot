@@ -46,7 +46,7 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 				function createContext(callback) {
 					// create context to pass (this contains our args, we pass objMsg by default)
 					context = {
-						objMsg: objMsg, 
+						objMsg: objMsg,
 						bot: bot,
 						objCommandTemplate: g_objCommandTemplate,
 						prefix: g_objConfig.prefix
