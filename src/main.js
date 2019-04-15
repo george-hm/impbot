@@ -6,7 +6,10 @@ const modHandler = require("./handler.js");
 const modMongo = require("mongodb").MongoClient;
 
 
-modMongo.connect(objConfig.db_host, {useNewUrlParser:true}).then(client => {
+modMongo.connect(
+	objConfig.db_host,
+	{useNewUrlParser:true}
+).then(client => {
 	const db = client.db(objConfig.db_name);
 	bot.db = db;
 }).catch(err => {
@@ -36,8 +39,17 @@ bot.on("message", objMsg => {
 				discriminator: objMsg.author.discriminator,
 				message: objMsg.content,
 				where: objMsg.channel.id,
-				timestamp: Date.now()
+				timestamp: bot.timestamp
 			}
+		);
+	}
+	if (objMsg.channel.type == "dm") {
+		console.log(objMsg.author.username + "#" +
+			objMsg.author.discriminator +
+			" => " +
+			bot.user.username + "#" +
+			bot.user.discriminator +
+			": " + objMsg.content
 		);
 	}
 
