@@ -24,7 +24,7 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 			let context;
 
 			modSeries([
-				function checkData(callback) {
+				function checkCommand(callback) {
 					if (objCommandData.on != "message") {
 						return resolve();
 					}
@@ -82,6 +82,65 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 }
 
 /**
+ * Handles commands which run on an interval
+ *
+ * @param      {Object}   bot     The bot instance
+ * @return     {Promise}  {}
+ */
+module.exports.interval = bot => {
+	bot.timestamp = Math.floor(Date.now() / 1000);
+
+	return new Promise((resolve, reject) => {
+		let arrToRun;
+		let context {};
+		modSeries([
+			function checkRuns(callback) {
+				let arrToRun = bot.db.collection("interval_data").find({
+					next_run: {
+						$lte: bot.timestamp
+					}
+				}).sort({
+					timestamp:-1
+				}).toArray();
+			},
+			function buildContext(callback) {
+				context.bot = bot;
+				context.hm_data = {
+					chat_token: objConfig.hm_data.chat_token,
+					usernames: objConfig.hm_data.hm_usernames,
+					channels: objConfig.hm_data.monitor_channels
+				}
+			},
+			function runCommands(callback) {
+				//TODO: run commands
+				// shouldn't need async here, we don't have to wait for each command
+				for (let i = 0; i < arrToRun.length; i++) {
+					let objRunData = arrToRun[i];
+					context.last_run = objRunData.last_run
+
+					fnFetchCommand(objRunData._id).then(([objCommandData, fnCommand]) => {
+						fnCommand(context).then(() => {
+							//TODO: update db entry for next run
+						}).catch(err => {
+							//TODO: update error log, also update interval_commands last_run, but NOT next_run
+							return err;
+						});
+					}).catch(err => {
+						if (err.includes("not found")) {
+							//something has fucked up in the database/command list
+							return console.log("Something went wrong trying to run interval command: " + objRunData._id);
+						}
+						return console.log(err);
+					});
+				}
+			}
+		], err => {
+			//error handling
+		});
+	});
+}
+
+/**
  * finds a command in g_objCommandTemplate and returns it as well as its actual
  * function from modCommandList
  *
@@ -119,7 +178,6 @@ function fnFetchCommand(strCommand) {
 	});
 }
 
-
 /**
  * Returns the help dialogue of a command
  *
@@ -147,7 +205,6 @@ function fnCommandHelp(objCommandData) {
 
 	return arrRetFormat.join("\n");
 }
-
 
 /**
  * Adds all args to context, if applicable
