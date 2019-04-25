@@ -2,7 +2,7 @@ const fs = require("fs");
 const modCommandList = require("./commands/index.js");
 const g_objCommandTemplate = JSON.parse(fs.readFileSync("./command_list.json", "utf8"));
 const g_objConfig = JSON.parse(fs.readFileSync("./config.json", "utf8"));
-const modSeries = require("async-series");
+const modAsync = require("async");
 
 /**
  * Checks if a message is a command, then runs the command if its valid
@@ -23,7 +23,7 @@ module.exports.find = (strPrefix, objMsg, bot) => {
 			// didnt want to use a waterfall, so initing var outside of series works
 			let context;
 
-			modSeries([
+			modAsync.series([
 				function checkCommand(callback) {
 					if (objCommandData.on != "message") {
 						return resolve();
@@ -92,7 +92,7 @@ module.exports.interval = bot => {
 
 	return new Promise((resolve, reject) => {
 		let arrToRun;
-		let context {};
+		let context = {};
 		modSeries([
 			function checkRuns(callback) {
 				let arrToRun = bot.db.collection("interval_data").find({

@@ -7,7 +7,6 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.6.2",
-    "async-series": "0.0.1",
     "discord.js": "^11.4.2",
     "ffmpeg-binaries": "^4.0.0",
     "googleapis": "^37.2.0",
