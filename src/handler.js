@@ -107,7 +107,7 @@ module.exports.interval = bot => {
 				context.bot = bot;
 				context.hm_data = {
 					chat_token: objConfig.hm_data.chat_token,
-					usernames: objConfig.hm_data.hm_usernames,
+					usernames: objConfig.hm_data.usernames,
 					channels: objConfig.hm_data.monitor_channels
 				}
 			},
