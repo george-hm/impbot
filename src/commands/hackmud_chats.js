@@ -65,14 +65,24 @@ module.exports = (context) => {
 					});
 
 					if (Object.keys(channel_locations).length == 0) {
-						return callback("No channels to monitor")
+						return callback("No channels to monitor");
 					}
 
 					return callback(null, channel_locations);
 				});
 			},
-			function getMessages(callback) {
+			function weighUsers(channel_locations, callback) {
+				// should we be weighing?
+				// need to think of a smart way to do this
+			},
+			function getMessages(channel_locations, callback) {
+				objOptions.url = "https://www.hackmud.com/mobile/chats.json";
 
+				rp(objOptions).then(objResponse => {
+					let chats = objResponse.chats;
+
+					//TODO: get chat messages
+				});
 			}
 		],
 		function(err, result) {
