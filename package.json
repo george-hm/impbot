@@ -1,10 +1,10 @@
 {
-  "name": "discord_bots",
+  "name": "impbot",
   "version": "1.0.0",
   "description": "packages required for discord bots",
   "main": "bot.js",
-  "author": "Imp",
-  "license": "ISC",
+  "author": "George",
+  "license": "MIT",
   "dependencies": {
     "async": "^2.6.2",
     "discord.js": "^11.4.2",
