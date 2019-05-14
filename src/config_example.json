@@ -1,11 +1,13 @@
 {
 	"bot_token":"EXAMPLE",
-	"chat_token":"EXAMPLE",
-	"admin_id":"EXAMPLE",
+	"admins":["EXAMPLE"],
 	"prefix":"EXAMPLE",
 	"g_api_key":"EXAMPLE",
-	"hm_username":"EAMPLE",
 	"db_host": "mongodb://localhost:27017",
-	"db_name": "EXAMPLE"
-
+	"db_name": "EXAMPLE",
+	"hm_data": {
+		"chat_token":"EXAMPLE",
+		"usernames": ["EXAMPLE"],
+		"monitor_channels": ["EXAMPLE"]
+	}
 }
