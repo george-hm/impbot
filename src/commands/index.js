@@ -1,22 +1,11 @@
-const uptime = require("./uptime");
-const ping   = require("./ping");
-const avatar = require("./avatar");
-const help   = require("./help");
-const eval_command = require("./eval.js");
-const botsend = require("./botsend.js");
-const snowflake = require("./snowflake.js");
+let objCommands = {
+	"uptime"    : require(__dirname + "/uptime"),
+	"ping"      : require(__dirname + "/ping"),
+	"avatar"    : require(__dirname + "/avatar"),
+	"help"      : require(__dirname + "/help"),
+	"eval"      : require(__dirname + "/eval.js"),
+	"botsend"   : require(__dirname + "/botsend.js"),
+	"snowflake" : require(__dirname + "/snowflake.js")
+};
 
-let objComands = {
-	"uptime"    : uptime,
-	"ping"      : ping,
-	"avatar"    : avatar,
-	"help"      : help,
-	"eval"      : eval_command,
-	"botsend"   : botsend,
-	"snowflake" : snowflake
-}
-
-for (let command in objComands) {
-	// e.g. module.exports.ping = objComands.ping
-	module.exports[command] = objComands[command]
-}
+module.exports = objCommands;
