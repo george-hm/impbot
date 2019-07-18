@@ -1,34 +1,27 @@
-module.exports = (context) => {
-	return new Promise((resolve, reject) => {
-		if (!context.target || !context.message){
-			return reject("help");
+module.exports.main = async (context) => {
+	if (!context.target || !context.message){
+		throw "help";
+	}
+
+	try {
+		let user = await context.bot.fetchUser(context.target);
+		let dmChannel = await user.createDM();
+
+		return dmChannel.send(context.message);
+	} catch (err) {
+		if (err.message.includes("is not snowflake")) {
+			let channel = context.bot.channels.get(context.target);
+			if (!channel || !channel.send) {
+				return context.msg.reply("Couldn't find channel or user by ID.");
+			}
+			return channel.send(context.message);
 		}
 
-		context.bot.fetchUser(context.target).then((user, err) => {
-			if (err) {
-				let user = context.objMsg.mentions.users.array()[0];
-				if (!user) {
-					return err;
-				}
-				return resolve(user.send(context.message));
-			}
-			
-			user.createDM().then(dmChannel => {
-				return resolve(dmChannel.send(context.message));
-			});
-		}).catch(err => {
-			if (err.message === "Unknown User") {
-				let channel = context.bot.channels.get(context.target);
-				if (!channel || !channel.send) {
-					return resolve(context.objMsg.reply("Couldn't find channel or user by ID."));
-				}
-				return resolve(channel.send(context.message));
-			}
-			let user = context.objMsg.mentions.users.array()[0];
-			if (user) {
-				return resolve(user.send(context.message));
-			}
-			return reject(err);
-		});
-	});
-}
+		let user = context.msg.mentions.users.array()[0];
+		if (user) {
+			return user.send(context.message);
+		}
+		console.log(err);
+		throw err;
+	}
+};

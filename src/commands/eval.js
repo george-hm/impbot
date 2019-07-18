@@ -1,21 +1,20 @@
-module.exports = (context) => {
-	return new Promise((resolve, reject) => {
-		if (!context.code) {
-			return reject("help");
-		}
-		let ev;
-		try {
-			ev = eval(context.code);
-		}
-		catch(e) {
-			ev = e;
-		}
-		let arrRetMsg = [
-			"**EVAL OUTPUT:**```js",
-			ev,
-			"```"
-		];
+module.exports.main = async (context) => {
+	if (!context.code) {
+		throw "help";
+	}
 
-		return resolve(context.objMsg.reply(arrRetMsg.join("\n")));
-	});
-}
+	let output;
+	try {
+		output = eval(context.code);
+	}
+	catch(e) {
+		output = e;
+	}
+	let arrRetMsg = [
+		"**EVAL OUTPUT:**```js",
+		output,
+		"```"
+	];
+
+	return context.msg.reply(arrRetMsg.join("\n"));
+};

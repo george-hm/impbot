@@ -1,69 +1,71 @@
-const modDiscord = require("discord.js");
-const bot = new modDiscord.Client();
+const discordjs = require("discord.js");
+const bot = new discordjs.Client();
 const fs = require("fs");
-const objConfig = JSON.parse(fs.readFileSync("./config.json", "utf8"));
-const modHandler = require("./handler.js");
-const modMongo = require("mongodb").MongoClient;
+const config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
+const handler = require(__dirname + "/handler.js");
+const mongoDb = require("mongodb").MongoClient;
 
 // make a connection to the database
-modMongo.connect(
-	objConfig.db_host,
+mongoDb.connect(
+	config.db_host,
 	{useNewUrlParser:true}
 ).then(client => {
-	const db = client.db(objConfig.db_name);
-	bot.db = db;
+	bot.db = client.db(config.db_name);
 }).catch(err => {
 	console.log("Failed to connect to database, error: " + err);
 });
 
 // triggered when the bot is logged in
 bot.on("ready", () => {
-	console.log("logged in as", bot.user.tag);
+	console.log("logged in as " + bot.user.tag);
 
 	// pass snowflake util to bot, a command uses this
-	bot.snowflake = modDiscord.SnowflakeUtil;
+	bot.snowflake = discordjs.SnowflakeUtil;
 
-	// set user activity to prefix + help, e.g. "/help"
-	bot.user.setActivity(objConfig.prefix + "help");
+	bot.user.setActivity(config.prefix + "help");
 });
 
 // this is ran every time a message is sent where the bot is present
-bot.on("message", objMsg => {
+bot.on("message", msg => {
 	//TODO: welcome users, config for guilds and messages
 
 	// ignore everything coming from a bot
-	if (objMsg.author.bot) {
+	if (msg.author.bot) {
 		return;
 	}
 
-	// unix timestamp, ending in seconds
-	bot.timestamp = Math.floor(Date.now() / 1000);
+	bot.timestamp = Date.now();
+
 
 	// if bot.db, log every chat message we get
 	if (bot.db) {
 		bot.db.collection("discord_chats").insertOne(
 			{
-				user_id: objMsg.author.id,
-				username: objMsg.author.username,
-				discriminator: objMsg.author.discriminator,
-				message: objMsg.content,
-				where: objMsg.channel.id,
+				user_id: msg.author.id,
+				username: msg.author.username,
+				discriminator: msg.author.discriminator,
+				message: msg.content,
+				where: msg.channel.id,
 				timestamp: bot.timestamp
 			}
 		);
 	}
 	// console log if someone is dming the bot
-	if (objMsg.channel.type == "dm") {
-		console.log(objMsg.author.username + "#" +
-			objMsg.author.discriminator + " => " +
+	if (msg.channel.type == "dm") {
+		console.log(msg.author.username + "#" +
+			msg.author.discriminator + " => " +
 			bot.user.username + "#" +
 			bot.user.discriminator +
-			": " + objMsg.content
+			": " + msg.content
 		);
 	}
 
-	modHandler.find(objConfig.prefix, objMsg, bot);
+	if (!bot.prefix) {
+		bot.prefix = config.prefix;
+	}
+
+	handler.find(msg, bot);
 });
 
 // log the bot in using our token
-bot.login(objConfig.bot_token);
+bot.login(config.bot_token);

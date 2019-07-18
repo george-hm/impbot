@@ -1,10 +1,10 @@
 const modMongo = require("mongodb").MongoClient;
 const fs = require("fs");
 const objConfig = JSON.parse(
-	fs.readFileSync("../config.json", "utf8")
+	fs.readFileSync(__dirname + "../config.json", "utf8")
 );
 const objCommandData = JSON.parse(
-	fs.readFileSync("../command_list.json")
+	fs.readFileSync(__dirname + "../command_list.json")
 );
 const modAsync = require("async");
 
