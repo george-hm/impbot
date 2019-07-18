@@ -4,39 +4,38 @@
  * @param      {Object}   context  The context
  * @return     {Promise}
  */
-module.exports = (context) => {
-	return new Promise((resolve, reject) => {
-		if (!context.objCommandTemplate) {
-			return reject("Missing required data context.objCommandTemplate");
+async function main(context) {
+		if (!context.template) {
+			throw "Missing required data context.template";
 		}
 
 		if (context.command) {
-			let objCommandData = context.objCommandTemplate[context.command];
+			let objCommandData = context.template[context.command];
 			if (objCommandData) {
 				let strRetMsg = [
 					"```diff",
 					"+ " + context.command,
-					fnCommandHelp(objCommandData, context.prefix),
+					getCommandHelp(objCommandData, context.prefix),
 					"```"
 				].join("\n");
 
-				return resolve(context.objMsg.reply(strRetMsg));
+				return context.msg.reply(strRetMsg);
 			}
 
-			return resolve(context.objMsg.reply("Command does not exist."));
+			return context.msg.reply("Command does not exist.");
 		}
 
 		let arrCommandHelpSummary = [
 			"**COMMANDS:**",
 			"```diff",
-		]
-		for (let strCommand in context.objCommandTemplate) {
-			if (context.objCommandTemplate[strCommand].on != "message") {
+		];
+		for (let strCommand in context.template) {
+			if (context.template[strCommand].on != "message") {
 				continue;
 			}
 
-			let strComHelp = fnCommandHelp(
-				context.objCommandTemplate[strCommand],
+			let strComHelp = module.exports.getCommandHelp(
+				context.template[strCommand],
 				context.prefix,
 				true
 			);
@@ -47,43 +46,41 @@ module.exports = (context) => {
 		}
 		arrCommandHelpSummary.push("```");
 		let strReturnMsg = arrCommandHelpSummary.join("\n");
-		return resolve(context.objMsg.reply(strReturnMsg));
-
-	});
-};
+		return context.msg.reply(strReturnMsg);
+}
 
 /**
- * Returns the help dialogue of a command (uses objMsg.reply)
+ * Returns the help dialogue of a command
  *
- * @param      {Object}  objCommandData  Used to fetch the descriptions
- * @param      {String}  prefix          The bot prefix
+ * @param      {Object}   template  Used to fetch the descriptions
+ * @param      {String}   prefix    The prefix for the bot
+ * @param      {Boolean}  short     If we should return simple help message or not
  * @return     {String}  Command information
  */
-function fnCommandHelp(objCommandData, prefix, short) {
-	// add arguments to strArguments
-	let strArguments = "";
-	Object.keys(objCommandData.args).forEach(arg => {
-		strArguments += (objCommandData.args[arg]) + ", ";
+function getCommandHelp(template, prefix, short) {
+	// add arguments to args
+	let args = "";
+	Object.keys(template.args).forEach(arg => {
+		args += (template.args[arg]) + ", ";
 	});
-	strArguments = strArguments.slice(0, -2);
+	args = args.slice(0, -2);
 
-	let strUsage =  prefix +
-		objCommandData.name +
+	let usage =  prefix +
+		template.name +
 		" " +
-		strArguments;
+		args;
 
-	let strRet;
+		if (short) {
+			returnData = usage + "\n\t" + template.desc;
+		} else {
+			returnData = [
+				"alias(es):\n\t" + template.alias.join(", "),
+				"\nusage:\n\t" + usage,
+				"\nDescription:\n\t" + template.desc
+			].join("\n");
+		}
 
-	if (short) {
-		strRet = strUsage + "\n\t" + objCommandData.desc;
-	} else {
-		strRet = [
-			"alias(es):\n\t" + objCommandData.alias.join(", "),
-			"\nusage:\n\t" + strUsage,
-			"\nDescription:\n\t" + objCommandData.desc
-		].join("\n");
-
-	}
-
-	return strRet;
+	return returnData;
 }
+
+module.exports = {main, getCommandHelp};

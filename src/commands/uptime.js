@@ -2,14 +2,12 @@
  * Return uptime of the bot
  *
  * @param      {Object}   context  { objMsg, bot }
- * @return     {Promise}  
+ * @return     {Promise}
  */
-module.exports = (context) => {
-	return new Promise((resolve, reject) => {
-		if (!context.objMsg || !context.bot)
-			return reject("help");
+module.exports.main = async (context) => {
+	if (!context.msg || !context.bot)
+		throw "help";
 
-		let intUptime = (context.bot.uptime/1000).toFixed(0);
-		return resolve(context.objMsg.reply("Uptime: " + intUptime + " seconds."));
-	});
-}
+	let intUptime = (context.bot.uptime/1000).toFixed(0);
+	return context.msg.reply("Uptime: " + intUptime + " seconds.");
+};
