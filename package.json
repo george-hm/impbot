@@ -4,6 +4,9 @@
   "description": "packages required for discord bots",
   "main": "bot.js",
   "author": "George",
+  "scripts": {
+    "start": "node src/main.js"
+  },
   "license": "MIT",
   "dependencies": {
     "async": "^2.6.2",
