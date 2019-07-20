@@ -10,7 +10,7 @@ const config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
  * @param      {Object}   bot	  The bot instance
  */
 module.exports.find = async (msg, bot) => {
-	let prefix = bot.prefix;
+	let prefix = config.prefix;
 	if (!msg.content.startsWith(prefix)) {
 		return;
 	}
@@ -24,15 +24,12 @@ module.exports.find = async (msg, bot) => {
 	if (!commandData || commandData.template.on != "message") {
 		return;
 	}
-	if (commandData.template.admin == true) {
-		let isAdmin = checkAdmin(
-			config.admins,
-			msg,
-			commandData.template,
-			bot
-		);
 
-		if (!isAdmin) {
+	if (commandData.template.admin == true) {
+		// log some data
+		bot.discordUser.adminLog(commandData.template.name);
+
+		if (!bot.discordUser.isAdmin()) {
 			return msg.react("⛔");
 		}
 	}
@@ -49,12 +46,14 @@ module.exports.find = async (msg, bot) => {
 	context = {...context, ...assembleArgs(msg.content, commandData.template)};
 
 	try {
+		// running the command
 		await commandData.command.main(context);
 		return msg.react("✅");
 	} catch (err) {
 		if (err === "help") {
 			context.command = commandData.template.name;
-			return msg.reply("Something went wrong trying to run your command, see the help:```diff\n" +
+			return msg.reply(
+				"Something went wrong trying to run your command, see the help:```diff\n" +
 				listOfCommands.help.getCommandHelp(commandData.template, config.prefix) +
 				"```"
 			);
@@ -64,11 +63,11 @@ module.exports.find = async (msg, bot) => {
 };
 
 /**
- * finds a command in listOfCommands and returns it as well as its actual
- * function from modCommandList
+ * finds a command in our command template and returns it as well as its actual
+ * function from listOfCommands
  *
  * @param      {String}   strCommand  The command to try and fetch
- * @return     {Promise}  {template, command} or false if nothing found
+ * @returns    {*}  	 			  {template, command} or false if nothing found
  */
 function fetchCommand(strCommand) {
 	if (strCommand in commandTemplate) {
@@ -88,7 +87,6 @@ function fetchCommand(strCommand) {
 		}
 	}
 
-	console.log("Command not found");
 	return false;
 }
 
@@ -112,33 +110,4 @@ function assembleArgs(strMsgContent, template) {
 	}
 
 	return toReturn;
-}
-
-/**
- * check if user is admin and log data
- *
- * @param      {Array}    arrAdmins       Array containing admin ids
- * @param      {Object}   msg          Object message from discord
- * @param      {Object}   template  Command data containing desc etc.
- * @param      {Object}   bot             The bot instance
- * @return     {boolean}  true if admin, false if not
- */
-function checkAdmin(arrAdmins, msg, template, bot) {
-
-	let isAdmin = arrAdmins.includes(msg.author.id);
-	if (bot.db) {
-		bot.db.collection("admin_log").insertOne(
-			{
-				admin: isAdmin,
-				user_id: msg.author.id,
-				username: msg.author.username,
-				discriminator: msg.author.discriminator,
-				command: template.name,
-				where: msg.channel.id,
-				timestamp: bot.timestamp
-			}
-		);
-	}
-
-	return isAdmin;
 }
