@@ -3,16 +3,18 @@ const bot = new discordjs.Client();
 const fs = require("fs");
 const config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
 const handler = require(__dirname + "/handler.js");
-const mongoDb = require("mongodb").MongoClient;
+const database = require(__dirname + "/models/database.js");
+const User = require(__dirname + "/models/user.js");
 
-// make a connection to the database
-mongoDb.connect(
+database.connect(
 	config.db_host,
-	{useNewUrlParser:true}
-).then(client => {
-	bot.db = client.db(config.db_name);
-}).catch(err => {
-	console.log("Failed to connect to database, error: " + err);
+	config.db_name
+).catch(err => {
+	console.log(
+		"Database " +
+		err.toString() +
+		"\n\nNot logging data."
+	);
 });
 
 // triggered when the bot is logged in
@@ -25,7 +27,7 @@ bot.on("ready", () => {
 	bot.user.setActivity(config.prefix + "help");
 });
 
-// this is ran every time a message is sent where the bot is present
+// triggered on a message being sent
 bot.on("message", msg => {
 	//TODO: welcome users, config for guilds and messages
 
@@ -34,34 +36,19 @@ bot.on("message", msg => {
 		return;
 	}
 
-	bot.timestamp = Date.now();
+	// create user class (for checks and logging data to db)
+	bot.discordUser = new User(msg);
+	bot.discordUser.save();
 
-
-	// if bot.db, log every chat message we get
-	if (bot.db) {
-		bot.db.collection("discord_chats").insertOne(
-			{
-				user_id: msg.author.id,
-				username: msg.author.username,
-				discriminator: msg.author.discriminator,
-				message: msg.content,
-				where: msg.channel.id,
-				timestamp: bot.timestamp
-			}
-		);
-	}
 	// console log if someone is dming the bot
 	if (msg.channel.type == "dm") {
-		console.log(msg.author.username + "#" +
-			msg.author.discriminator + " => " +
+		console.log(
+			bot.discordUser.getUsername() + "#" +
+			bot.discordUser.getDiscrim() + " => " +
 			bot.user.username + "#" +
 			bot.user.discriminator +
 			": " + msg.content
 		);
-	}
-
-	if (!bot.prefix) {
-		bot.prefix = config.prefix;
 	}
 
 	handler.find(msg, bot);
