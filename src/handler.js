@@ -93,7 +93,7 @@ function fetchCommand(strCommand) {
 /**
  * Get user args and return an object with them
  *
- * @param      {String}  strArgs        A message to extract args from
+ * @param      {String}  msgContent     A message to extract args from
  * @param      {Object}  template       The object to check for args
  * @returns    {Object}					An object containing the args
  * @example
@@ -102,11 +102,13 @@ function fetchCommand(strCommand) {
  * 	  {"some_command":{"args":["foo", "bar"]}}
  *   ) -> {"foo":"hey", "bar":"there"}
  */
-function assembleArgs(strMsgContent, template) {
-	strMsgContent = strMsgContent.split(" ").slice(1);
+function assembleArgs(msgContent, template) {
+	msgContent = msgContent.split(" ").slice(1);
 	let toReturn = {};
-	for (let strArg = 0; strArg < strMsgContent.length; strArg++) {
-		toReturn[Object.keys(template.args)[strArg]] = strMsgContent[strArg];
+
+	for (let arg = 0; arg < msgContent.length; arg++) {
+		let templateArg = Object.keys(template.args)[arg];
+		toReturn[templateArg] = msgContent[arg];
 	}
 
 	return toReturn;
