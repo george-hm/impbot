@@ -1,6 +1,6 @@
 const fs = require("fs");
 const commandList = require(__dirname + "/../commands");
-const template = JSON.parse(fs.readFileSync(__dirname + "/../command_list.json", "utf8"));
+const templates = JSON.parse(fs.readFileSync(__dirname + "/../command_list.json", "utf8"));
 
 module.exports = async (bot) => {
 	let toLookup = [];
