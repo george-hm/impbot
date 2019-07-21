@@ -2,16 +2,18 @@ const discordjs = require("discord.js");
 const bot = new discordjs.Client();
 const fs = require("fs");
 const config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
-const handler = require(__dirname + "/handler.js");
 const database = require(__dirname + "/models/database.js");
+const handlers = require(__dirname + "/handlers");
 const User = require(__dirname + "/models/user.js");
+const util = require('util');
+setTimeout = util.promisify(setTimeout);
 
 database.connect(
 	config.db_host,
 	config.db_name
 ).catch(err => {
 	console.log(
-		"Database " +
+		"Database: " +
 		err.toString() +
 		"\n\nNot logging data."
 	);
@@ -23,6 +25,7 @@ bot.on("ready", () => {
 
 	// pass snowflake util to bot, a command uses this
 	bot.snowflake = discordjs.SnowflakeUtil;
+	bot.cache = {};
 
 	bot.user.setActivity(config.prefix + "help");
 });
@@ -51,7 +54,12 @@ bot.on("message", msg => {
 		);
 	}
 
-	handler.find(msg, bot);
+	return handlers.message(msg, bot);
+});
+
+// every X seconds run this
+setTimeout(config.check_time).then(() => {
+	handlers.interval(bot);
 });
 
 // log the bot in using our token
