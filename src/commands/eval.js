@@ -3,6 +3,10 @@ module.exports.main = async (context) => {
 		throw "help";
 	}
 
+	// this is a dirty fix so we can get the whole message (rather than 1 word)
+	// e.g. "1 + 1" comes in as "1", we want the whole message
+	context.code = context.msg.content.split(context.prefix + "eval")[1];
+
 	let output;
 	try {
 		output = eval(context.code);
@@ -10,11 +14,11 @@ module.exports.main = async (context) => {
 	catch(e) {
 		output = e;
 	}
-	let arrRetMsg = [
+	let retMsg = [
 		"**EVAL OUTPUT:**```js",
 		output,
 		"```"
 	];
 
-	return context.msg.reply(arrRetMsg.join("\n"));
+	return context.msg.reply(retMsg.join("\n"));
 };
