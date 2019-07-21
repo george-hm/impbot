@@ -1,7 +1,7 @@
 const fs = require("fs");
-const listOfCommands = require(__dirname + "/commands");
-const commandTemplate = JSON.parse(fs.readFileSync(__dirname + "/command_list.json", "utf8"));
-const config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
+const commandList = require(__dirname + "/../commands");
+const templateList = JSON.parse(fs.readFileSync(__dirname + "/../command_list.json", "utf8"));
+const config = JSON.parse(fs.readFileSync(__dirname + "/../config.json", "utf8"));
 
 /**
  * Checks if a message is a command, then runs the command if its valid
@@ -9,7 +9,7 @@ const config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
  * @param      {Object}   msg     The object message
  * @param      {Object}   bot	  The bot instance
  */
-module.exports.find = async (msg, bot) => {
+module.exports = async (msg, bot) => {
 	let prefix = config.prefix;
 	if (!msg.content.startsWith(prefix)) {
 		return;
@@ -38,7 +38,7 @@ module.exports.find = async (msg, bot) => {
 	let context = {
 		msg: msg,
 		bot: bot,
-		template: commandTemplate,
+		templates: templateList,
 		prefix: config.prefix
 	};
 
@@ -54,7 +54,7 @@ module.exports.find = async (msg, bot) => {
 			context.command = commandData.template.name;
 			return msg.reply(
 				"Something went wrong trying to run your command, see the help:```diff\n" +
-				listOfCommands.help.getCommandHelp(commandData.template, config.prefix) +
+				commandList.help.getCommandHelp(commandData.template, config.prefix) +
 				"```"
 			);
 		}
@@ -70,19 +70,19 @@ module.exports.find = async (msg, bot) => {
  * @returns    {*}  	 			  {template, command} or false if nothing found
  */
 function fetchCommand(strCommand) {
-	if (strCommand in commandTemplate) {
+	if (strCommand in templateList) {
 		return {
-			template: commandTemplate[strCommand],
-			command: listOfCommands[strCommand]
+			template: templateList[strCommand],
+			command: commandList[strCommand]
 		};
 	}
 
 	// find alias
-	for (let strKey in commandTemplate) {
-		if (commandTemplate[strKey].alias.includes(strCommand)) {
+	for (let strKey in templateList) {
+		if (templateList[strKey].alias.includes(strCommand)) {
 			return {
-				template: commandTemplate[strKey],
-				command: listOfCommands[strKey]
+				template: templateList[strKey],
+				command: commandList[strKey]
 			};
 		}
 	}
