@@ -5,12 +5,12 @@
  * @return     {Promise}
  */
 async function main(context) {
-		if (!context.template) {
-			throw "Missing required data context.template";
+		if (!context.templates) {
+			throw "Missing required data context.templates";
 		}
 
 		if (context.command) {
-			let objCommandData = context.template[context.command];
+			let objCommandData = context.templates[context.command];
 			if (objCommandData) {
 				let strRetMsg = [
 					"```diff",
@@ -29,13 +29,13 @@ async function main(context) {
 			"**COMMANDS:**",
 			"```diff",
 		];
-		for (let strCommand in context.template) {
-			if (context.template[strCommand].on != "message") {
+		for (let strCommand in context.templates) {
+			if (context.templates[strCommand].on != "message") {
 				continue;
 			}
 
 			let strComHelp = module.exports.getCommandHelp(
-				context.template[strCommand],
+				context.templates[strCommand],
 				context.prefix,
 				true
 			);
