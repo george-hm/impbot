@@ -1,7 +1,7 @@
 const discordjs = require("discord.js");
 const bot = new discordjs.Client();
 const fs = require("fs");
-const config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
+const config = JSON.parse(fs.readFileSync(__dirname + "/configs/config.json", "utf8"));
 const database = require(__dirname + "/models/database.js");
 const handlers = require(__dirname + "/handlers");
 const User = require(__dirname + "/models/user.js");

@@ -1,7 +1,7 @@
 const fs = require("fs");
 const commandList = require(__dirname + "/../commands");
-const templateList = JSON.parse(fs.readFileSync(__dirname + "/../command_list.json", "utf8"));
-const config = JSON.parse(fs.readFileSync(__dirname + "/../config.json", "utf8"));
+const templateList = JSON.parse(fs.readFileSync(__dirname + "/../configs/command_list.json", "utf8"));
+const config = JSON.parse(fs.readFileSync(__dirname + "/../configs/config.json", "utf8"));
 
 /**
  * Checks if a message is a command, then runs the command if its valid

@@ -86,10 +86,7 @@
 	"hackmud_chats": {
 		"on": "interval",
 		"interval": 5000,
-		"alias": [],
 		"name": "hackmud_chats",
-		"desc": "Periodically logs hackmud messages from in-game",
-		"admin": true,
-		"args": {}
+		"desc": "Periodically logs hackmud messages from in-game"
 	}
 }
