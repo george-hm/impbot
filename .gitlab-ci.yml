@@ -30,7 +30,7 @@ dev_deploy:
   only:
     - develop
   script:
-    - ssh $SSH_USER_DEV@$SSH_HOST_PROD -p 8373
+    - ssh $SSH_USER_DEV@$SSH_HOST_DEV -p 8373 -T
     - cd impbot
     - git checkout develop
     - git pull
