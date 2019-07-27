@@ -32,9 +32,4 @@ dev_deploy:
   only:
     - develop
   script:
-    - ssh -o StrictHostKeyChecking=no $SSH_USER_DEV@$SSH_HOST_DEV -p 8373 -T
-    - cd impbot
-    - git checkout develop
-    - git pull
-    - forever stop "impbot-dev" &> /dev/null
-    - forever start --id "impbot-dev" -c "npm start" ./
+    - ssh -o StrictHostKeyChecking=no $SSH_USER_DEV@$SSH_HOST_DEV -p 8373 -T "ls -lah; cd impbot; git checkout develop; git pull; forever stop \"impbot-dev\" &> /dev/null; forever start --id \"impbot-dev\" -c \"npm start\" ./;"
