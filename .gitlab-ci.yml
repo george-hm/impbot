@@ -23,6 +23,8 @@ before_script:
    ##
    - mkdir -p ~/.ssh
    - chmod 700 ~/.ssh
+   ## turn off strickhostkey chcking
+   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
 dev_deploy:
   stage: deploy
