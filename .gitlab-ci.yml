@@ -24,7 +24,7 @@ before_script:
    - mkdir -p ~/.ssh
    - chmod 700 ~/.ssh
    ## turn off strickhostkey chcking
-   - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
 dev_deploy:
   stage: deploy
@@ -32,7 +32,7 @@ dev_deploy:
   only:
     - develop
   script:
-    - ssh $SSH_USER_DEV@$SSH_HOST_DEV -p 8373 -T
+    - ssh -o StrictHostKeyChecking=no $SSH_USER_DEV@$SSH_HOST_DEV -p 8373 -T
     - cd impbot
     - git checkout develop
     - git pull
