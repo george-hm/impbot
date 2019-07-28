@@ -10,24 +10,25 @@ const config = JSON.parse(fs.readFileSync(__dirname + "/../configs/config.json",
  * @param      {Object}   bot	  The bot instance
  */
 module.exports = async (msg, bot) => {
-	let prefix = config.prefix;
+	const prefix = config.prefix;
 	if (!msg.content.startsWith(prefix)) {
 		return;
 	}
 
 	// get the command template, including the function
-	let commandData = fetchCommand(
+	const commandData = fetchCommand(
 		msg.content.split(prefix)[1]
 		.split(" ")[0]
 	);
+	const commandTemplate = commandData.template;
 
-	if (!commandData || commandData.template.on != "message") {
+	if (!commandData || commandTemplate.on != "message") {
 		return;
 	}
 
-	if (commandData.template.admin == true) {
+	if (commandTemplate.admin == true) {
 		// log some data
-		bot.discordUser.adminLog(commandData.template.name);
+		bot.discordUser.adminLog(commandTemplate.name);
 
 		if (!bot.discordUser.isAdmin()) {
 			return msg.react("⛔");
@@ -43,7 +44,7 @@ module.exports = async (msg, bot) => {
 	};
 
 	// merge the result of assembleArgs into context
-	context = {...context, ...assembleArgs(msg.content, commandData.template)};
+	context = {...context, ...assembleArgs(msg.content, commandTemplate)};
 
 	try {
 		// running the command
@@ -51,10 +52,10 @@ module.exports = async (msg, bot) => {
 		return msg.react("✅");
 	} catch (err) {
 		if (err === "help") {
-			context.command = commandData.template.name;
+			context.command = commandTemplate.name;
 			return msg.reply(
 				"Something went wrong trying to run your command, see the help:```diff\n" +
-				commandList.help.getCommandHelp(commandData.template, config.prefix) +
+				commandList.help.getCommandHelp(commandTemplate, config.prefix) +
 				"```"
 			);
 		}
