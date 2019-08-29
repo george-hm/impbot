@@ -58,8 +58,9 @@ bot.on("message", msg => {
 });
 
 // every X seconds run this
-setTimeout(config.check_time).then(() => {
-	handlers.interval(bot);
+setTimeout(config.check_time).then(async () => {
+	const successfulRun = await handlers.interval(bot);
+
 });
 
 // log the bot in using our token
