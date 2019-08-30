@@ -1,4 +1,4 @@
-const chat_pass = "ENTER_CHAT_PASS_HERE"
+const chat_pass = "ENTER_CHAT_PASS_HERE";
 
 let rp = require("request-promise");
 

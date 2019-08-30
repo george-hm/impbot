@@ -1,10 +1,14 @@
-const discordjs = require("discord.js");
-const bot = new discordjs.Client();
-const fs = require("fs");
-const config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
-const handler = require(__dirname + "/handler.js");
-const database = require(__dirname + "/models/database.js");
-const User = require(__dirname + "/models/user.js");
+// imports so that babel works
+import "regenerator-runtime";
+import "core-js";
+
+import {Client, SnowflakeUtil} from "discord.js";
+import fs from "fs";
+import handler from "./handler.js";
+import database from "./models/database.js";
+import User from "./models/user.js";
+const bot = new Client();
+const config = JSON.parse(fs.readFileSync(__dirname + "/configs/config.json", "utf8"));
 
 database.connect(
 	config.db_host,
@@ -22,7 +26,7 @@ bot.on("ready", () => {
 	console.log("logged in as " + bot.user.tag);
 
 	// pass snowflake util to bot, a command uses this
-	bot.snowflake = discordjs.SnowflakeUtil;
+	bot.snowflake = SnowflakeUtil;
 
 	bot.user.setActivity(config.prefix + "help");
 });
@@ -51,7 +55,7 @@ bot.on("message", msg => {
 		);
 	}
 
-	handler.find(msg, bot);
+	handler(msg, bot);
 });
 
 // log the bot in using our token

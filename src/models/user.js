@@ -1,5 +1,5 @@
-const database = require(__dirname + "/database.js");
-const fs = require("fs");
+import database from "./database.js";
+import fs from "fs";
 const config = JSON.parse(fs.readFileSync(__dirname + "/../config.json", "utf8"));
 const userCollection = "users";
 const adminCollection = "admin_log";
@@ -118,4 +118,4 @@ class User {
     }
 }
 
-module.exports = User;
+export default User;
