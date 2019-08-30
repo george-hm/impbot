@@ -1,7 +1,7 @@
-const fs = require("fs");
-const listOfCommands = require(__dirname + "/commands");
-const commandTemplate = JSON.parse(fs.readFileSync(__dirname + "/command_list.json", "utf8"));
-const config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
+import listOfCommands from "./commands";
+import fs from "fs";
+const commandTemplate = JSON.parse(fs.readFileSync( __dirname + "/command_list.json", "utf8"));
+const config = JSON.parse(fs.readFileSync(__dirname + "/configs/config.json", "utf8"));
 
 /**
  * Checks if a message is a command, then runs the command if its valid
@@ -9,7 +9,7 @@ const config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
  * @param      {Object}   msg     The object message
  * @param      {Object}   bot	  The bot instance
  */
-module.exports.find = async (msg, bot) => {
+export default async (msg, bot) => {
 	let prefix = config.prefix;
 	if (!msg.content.startsWith(prefix)) {
 		return;

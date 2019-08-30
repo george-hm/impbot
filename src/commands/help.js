@@ -4,7 +4,7 @@
  * @param      {Object}   context  The context
  * @return     {Promise}
  */
-async function main(context) {
+ const main = async (context) => {
 		if (!context.template) {
 			throw "Missing required data context.template";
 		}
@@ -12,7 +12,7 @@ async function main(context) {
 		if (context.command) {
 			let objCommandData = context.template[context.command];
 			if (objCommandData) {
-				let strRetMsg = [
+				const strRetMsg = [
 					"```diff",
 					"+ " + context.command,
 					getCommandHelp(objCommandData, context.prefix),
@@ -25,7 +25,7 @@ async function main(context) {
 			return context.msg.reply("Command does not exist.");
 		}
 
-		let arrCommandHelpSummary = [
+		const arrCommandHelpSummary = [
 			"**COMMANDS:**",
 			"```diff",
 		];
@@ -34,7 +34,7 @@ async function main(context) {
 				continue;
 			}
 
-			let strComHelp = module.exports.getCommandHelp(
+			const strComHelp = getCommandHelp(
 				context.template[strCommand],
 				context.prefix,
 				true
@@ -47,7 +47,7 @@ async function main(context) {
 		arrCommandHelpSummary.push("```");
 		let strReturnMsg = arrCommandHelpSummary.join("\n");
 		return context.msg.reply(strReturnMsg);
-}
+};
 
 /**
  * Returns the help dialogue of a command
@@ -57,7 +57,7 @@ async function main(context) {
  * @param      {Boolean}  short     If we should return simple help message or not
  * @return     {String}  Command information
  */
-function getCommandHelp(template, prefix, short) {
+const getCommandHelp = (template, prefix, short) => {
 	// add arguments to args
 	let args = "";
 	Object.keys(template.args).forEach(arg => {
@@ -65,22 +65,21 @@ function getCommandHelp(template, prefix, short) {
 	});
 	args = args.slice(0, -2);
 
-	let usage =  prefix +
+	const usage =  prefix +
 		template.name +
 		" " +
 		args;
 
-		if (short) {
-			returnData = usage + "\n\t" + template.desc;
-		} else {
-			returnData = [
-				"alias(es):\n\t" + template.alias.join(", "),
-				"\nusage:\n\t" + usage,
-				"\nDescription:\n\t" + template.desc
-			].join("\n");
-		}
+	let returnData;
+	if (short) {
+		returnData = usage + "\n\t" + template.desc;
+	} else {
+		returnData = "alias(es):\n\t" + template.alias.join(", ") +
+			"\nusage:\n\t" + usage +
+			"\nDescription:\n\t" + template.desc;
+	}
 
 	return returnData;
-}
+};
 
-module.exports = {main, getCommandHelp};
+export default {main, getCommandHelp};

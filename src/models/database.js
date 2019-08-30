@@ -1,4 +1,4 @@
-const mongo = require("mongodb").MongoClient;
+import {MongoClient as mongo} from "mongodb";
 
 class Database {
 
@@ -53,4 +53,4 @@ class Database {
     }
 }
 
-module.exports = Database;
+export default Database;
