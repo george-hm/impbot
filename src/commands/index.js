@@ -5,6 +5,7 @@ import help from "./help.js";
 import evalc from "./eval.js";
 import botsend from "./botsend.js";
 import snowflake from "./snowflake.js";
+import hchat from "./hackmudchats";
 
 const objCommands = {
 	"uptime"    : uptime,
@@ -13,7 +14,8 @@ const objCommands = {
 	"help"      : help,
 	"eval"      : evalc,
 	"botsend"   : botsend,
-	"snowflake" : snowflake
+	"snowflake" : snowflake,
+	"hsend"		: hchat
 };
 
 export default objCommands;

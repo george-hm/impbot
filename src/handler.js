@@ -1,6 +1,6 @@
 import listOfCommands from "./commands";
 import fs from "fs";
-const commandTemplate = JSON.parse(fs.readFileSync( __dirname + "/command_list.json", "utf8"));
+const commandTemplate = JSON.parse(fs.readFileSync( __dirname + "/configs/command_list.json", "utf8"));
 const config = JSON.parse(fs.readFileSync(__dirname + "/configs/config.json", "utf8"));
 
 /**
@@ -39,18 +39,19 @@ export default async (msg, bot) => {
 		msg: msg,
 		bot: bot,
 		template: commandTemplate,
-		prefix: config.prefix
+		prefix: config.prefix,
+		chat_token: config.hm_data.chat_token
 	};
 
 	// merge the result of assembleArgs into context
 	context = {...context, ...assembleArgs(msg.content, commandData.template)};
-
 	try {
 		// running the command
 		await commandData.command.main(context);
-		return msg.react("✅");
+		return msg.react("⭕");
 	} catch (err) {
 		if (err === "help") {
+			msg.react("❌");
 			context.command = commandData.template.name;
 			return msg.reply(
 				"Something went wrong trying to run your command, see the help:```diff\n" +
@@ -70,6 +71,7 @@ export default async (msg, bot) => {
  * @returns    {*}  	 			  {template, command} or false if nothing found
  */
 function fetchCommand(strCommand) {
+	console.log(strCommand);
 	if (strCommand in commandTemplate) {
 		return {
 			template: commandTemplate[strCommand],

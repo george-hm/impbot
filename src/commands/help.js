@@ -26,8 +26,7 @@
 		}
 
 		const arrCommandHelpSummary = [
-			"**COMMANDS:**",
-			"```diff",
+			"**COMMANDS:**```diff",
 		];
 		for (let strCommand in context.template) {
 			if (context.template[strCommand].on != "message") {
@@ -45,7 +44,7 @@
 			);
 		}
 		arrCommandHelpSummary.push("```");
-		let strReturnMsg = arrCommandHelpSummary.join("\n");
+		const strReturnMsg = arrCommandHelpSummary.join("\n");
 		return context.msg.reply(strReturnMsg);
 };
 
