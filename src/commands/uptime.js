@@ -4,10 +4,12 @@
  * @param      {Object}   context  { objMsg, bot }
  * @return     {Promise}
  */
-module.exports.main = async (context) => {
+const main = async (context) => {
 	if (!context.msg || !context.bot)
 		throw "help";
 
-	let intUptime = (context.bot.uptime/1000).toFixed(0);
+	const intUptime = (context.bot.uptime/1000).toFixed(0);
 	return context.msg.reply("Uptime: " + intUptime + " seconds.");
 };
+
+export default {main};

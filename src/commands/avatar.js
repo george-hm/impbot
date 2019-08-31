@@ -4,7 +4,7 @@
  * @param      {object}   context  The context, we get various info form here
  * @return     {Promise}
  */
-module.exports.main = async (context) => {
+const main = async (context) => {
 	if (!context.msg || !context.bot)
 		throw "help";
 
@@ -14,7 +14,7 @@ module.exports.main = async (context) => {
 		return context.msg.reply(strAvatarURL);
 	}
 	try {
-		let user = await context.bot.fetchUser(context.target);
+		const user = await context.bot.fetchUser(context.target);
 		if (!user.avatarURL) {
 			return context.msg.reply("That user does not have a profile picture.");
 		}
@@ -29,3 +29,5 @@ module.exports.main = async (context) => {
 		throw err;
 	}
 };
+
+export default {main};

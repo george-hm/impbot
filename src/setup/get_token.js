@@ -1,19 +1,19 @@
 const chat_pass = "ENTER_CHAT_PASS_HERE";
 
-let rp = require("request-promise");
+const axios = require("axios");
 
-let options = {
+const options = {
 	url:"https://www.hackmud.com/mobile/get_token.json",
 	method: "POST",
 	headers:{
 		"Content-Type": "application/json"
 	},
-	body: {"pass":chat_pass},
+	data: {"pass":chat_pass},
 	json:true
 };
 
-rp(options).then($ => {
-	console.log($.chat_token);
+axios(options).then(result => {
+	console.log(result.data);
 }).catch(err =>{
-	console.log(err);
+	console.log(err.data);
 });

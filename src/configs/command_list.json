@@ -83,6 +83,22 @@
 			"target": "user_id"
 		}
 	},
+	"hsend" : {
+		"on":"message",
+		"alias": [
+			"hchat",
+			"hackmudchat",
+			"sendhackmud"
+		],
+		"name": "hsend",
+		"desc": "Send a message to hackmud channel",
+		"admin": false,
+		"args": {
+			"username": "username",
+			"channel": "channel",
+			"hmsg": "message_to_send"
+		}
+	},
 	"hackmud_chats": {
 		"on": "interval",
 		"interval": 5000,

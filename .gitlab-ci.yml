@@ -1,0 +1,35 @@
+before_script:
+   ##
+   ## Install ssh-agent if not already installed, it is required by Docker.
+   ## (change apt-get to yum if you use an RPM-based image)
+   ##
+   - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+
+   ##
+   ## Run ssh-agent (inside the build environment)
+   ##
+   - eval $(ssh-agent -s)
+
+   ##
+   ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+   ## We're using tr to fix line endings which makes ed25519 keys work
+   ## without extra base64 encoding.
+   ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
+   ##
+   - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+
+   ##
+   ## Create the SSH directory and give it the right permissions
+   ##
+   - mkdir -p ~/.ssh
+   - chmod 700 ~/.ssh
+   ## turn off strickhostkey chcking
+   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+dev_deploy:
+  stage: deploy
+  environment: Staging
+  only:
+    - develop
+  script:
+    - ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no $SSH_USER_DEV@$SSH_HOST_DEV -p 8373 -T "cd impbot; git checkout develop; git pull; forever stop \"impbot-dev\" &> /dev/null; forever start --id \"impbot-dev\" ./src/main.js"

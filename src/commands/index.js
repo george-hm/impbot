@@ -1,11 +1,21 @@
-let objCommands = {
-	"uptime"    : require(__dirname + "/uptime"),
-	"ping"      : require(__dirname + "/ping"),
-	"avatar"    : require(__dirname + "/avatar"),
-	"help"      : require(__dirname + "/help"),
-	"eval"      : require(__dirname + "/eval.js"),
-	"botsend"   : require(__dirname + "/botsend.js"),
-	"snowflake" : require(__dirname + "/snowflake.js")
+import uptime from "./uptime.js";
+import ping from "./ping.js";
+import avatar from "./avatar.js";
+import help from "./help.js";
+import evalc from "./eval.js";
+import botsend from "./botsend.js";
+import snowflake from "./snowflake.js";
+import hchat from "./hackmudchats";
+
+const objCommands = {
+	"uptime"    : uptime,
+	"ping"      : ping,
+	"avatar"    : avatar,
+	"help"      : help,
+	"eval"      : evalc,
+	"botsend"   : botsend,
+	"snowflake" : snowflake,
+	"hsend"		: hchat
 };
 
-module.exports = objCommands;
+export default objCommands;

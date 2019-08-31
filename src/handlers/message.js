@@ -1,7 +1,7 @@
-const fs = require("fs");
-const commandList = require(__dirname + "/../commands");
-const templateList = JSON.parse(fs.readFileSync(__dirname + "/../configs/command_list.json", "utf8"));
-const config = JSON.parse(fs.readFileSync(__dirname + "/../configs/config.json", "utf8"));
+import listOfCommands from "./commands";
+import fs from "fs";
+const commandTemplate = JSON.parse(fs.readFileSync( __dirname + "/configs/command_list.json", "utf8"));
+const config = JSON.parse(fs.readFileSync(__dirname + "/configs/config.json", "utf8"));
 
 /**
  * Checks if a message is a command, then runs the command if its valid
@@ -9,8 +9,8 @@ const config = JSON.parse(fs.readFileSync(__dirname + "/../configs/config.json",
  * @param      {Object}   msg     The object message
  * @param      {Object}   bot	  The bot instance
  */
-module.exports = async (msg, bot) => {
-	const prefix = config.prefix;
+export default async (msg, bot) => {
+	let prefix = config.prefix;
 	if (!msg.content.startsWith(prefix)) {
 		return;
 	}
@@ -39,20 +39,21 @@ module.exports = async (msg, bot) => {
 	let context = {
 		msg: msg,
 		bot: bot,
-		templates: templateList,
-		prefix: config.prefix
+		template: commandTemplate,
+		prefix: config.prefix,
+		chat_token: config.hm_data.chat_token
 	};
 
 	// merge the result of assembleArgs into context
-	context = {...context, ...assembleArgs(msg.content, commandTemplate)};
-
+	context = {...context, ...assembleArgs(msg.content, commandData.template)};
 	try {
 		// running the command
 		await commandData.command.main(context);
-		return msg.react("✅");
+		return msg.react("⭕");
 	} catch (err) {
 		if (err === "help") {
-			context.command = commandTemplate.name;
+			msg.react("❌");
+			context.command = commandData.template.name;
 			return msg.reply(
 				"Something went wrong trying to run your command, see the help:```diff\n" +
 				commandList.help.getCommandHelp(commandTemplate, config.prefix) +
