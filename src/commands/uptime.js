@@ -1,10 +1,9 @@
 /**
  * Return uptime of the bot
  *
- * @param      {Object}   context  { objMsg, bot }
- * @return     {Promise}
+ * @param {*} context
  */
-const main = async (context) => {
+const main = async context => {
 	if (!context.msg || !context.bot)
 		throw "help";
 

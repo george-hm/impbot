@@ -5,17 +5,17 @@ import help from "./help.js";
 import evalc from "./eval.js";
 import botsend from "./botsend.js";
 import snowflake from "./snowflake.js";
-import hchat from "./hackmudchats";
+import hchat from "./hackmud_send_chat";
 
 const objCommands = {
-	"uptime"    : uptime,
-	"ping"      : ping,
-	"avatar"    : avatar,
-	"help"      : help,
-	"eval"      : evalc,
-	"botsend"   : botsend,
-	"snowflake" : snowflake,
-	"hsend"		: hchat
+	"uptime"           : uptime,
+	"ping"             : ping,
+	"avatar"           : avatar,
+	"help"             : help,
+	"eval"             : evalc,
+	"botsend"          : botsend,
+	"snowflake"        : snowflake,
+	"hackmud_send_chat": hchat
 };
 
 export default objCommands;

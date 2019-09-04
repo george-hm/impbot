@@ -1,4 +1,10 @@
-const main = async (context) => {
+/**
+ * Gets snowflake info from a user
+ * This contains various information like when they created their discord account.
+ *
+ * @param {*} context
+ */
+const main = async context => {
 	if (!context.target) {
 		throw "help";
 	}

@@ -1,10 +1,10 @@
 /**
- * returns help of call commands or only one command
+ * Returns help of call commands or only one command
  *
  * @param      {Object}   context  The context
  * @return     {Promise}
  */
- const main = async (context) => {
+ const main = async context => {
 		if (!context.template) {
 			throw "Missing required data context.template";
 		}

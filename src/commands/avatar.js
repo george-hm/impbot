@@ -1,10 +1,9 @@
 /**
  * Returns the users or a users avatar
  *
- * @param      {object}   context  The context, we get various info form here
- * @return     {Promise}
+ * @param      {*}   context
  */
-const main = async (context) => {
+const main = async context => {
 	if (!context.msg || !context.bot)
 		throw "help";
 

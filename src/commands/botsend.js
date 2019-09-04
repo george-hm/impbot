@@ -1,4 +1,9 @@
-const main = async (context) => {
+/**
+ * Sends a message to a user or channel, as the bot
+ *
+ * @param {*} context
+ */
+const main = async context => {
 	if (!context.target || !context.message){
 		throw "help";
 	}

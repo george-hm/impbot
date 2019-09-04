@@ -1,4 +1,9 @@
-const main = async (context) => {
+/**
+ * Run eval on a chat message (dangerous)
+ *
+ * @param {*} context
+ */
+const main = async context => {
 	if (!context.code) {
 		throw "help";
 	}
