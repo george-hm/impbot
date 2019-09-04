@@ -1,6 +1,6 @@
-import listOfCommands from "./commands";
+import commandList from "./commands";
 import fs from "fs";
-const commandTemplate = JSON.parse(fs.readFileSync( __dirname + "/configs/command_list.json", "utf8"));
+const templateList = JSON.parse(fs.readFileSync( __dirname + "/configs/command_list.json", "utf8"));
 const config = JSON.parse(fs.readFileSync(__dirname + "/configs/config.json", "utf8"));
 
 /**
@@ -22,7 +22,7 @@ export default async (msg, bot) => {
 	);
 	const commandTemplate = commandData.template;
 
-	if (!commandData || commandTemplate.on != "message") {
+	if (!commandData || !commandTemplate || commandTemplate.on != "message") {
 		return;
 	}
 
@@ -45,7 +45,7 @@ export default async (msg, bot) => {
 	};
 
 	// merge the result of assembleArgs into context
-	context = {...context, ...assembleArgs(msg.content, commandData.template)};
+	context = {...context, ...assembleArgs(msg.content, commandTemplate)};
 	try {
 		// running the command
 		await commandData.command.main(context);
@@ -53,7 +53,7 @@ export default async (msg, bot) => {
 	} catch (err) {
 		if (err === "help") {
 			msg.react("❌");
-			context.command = commandData.template.name;
+			context.command = commandTemplate.name;
 			return msg.reply(
 				"Something went wrong trying to run your command, see the help:```diff\n" +
 				commandList.help.getCommandHelp(commandTemplate, config.prefix) +
@@ -106,10 +106,10 @@ function fetchCommand(strCommand) {
  */
 function assembleArgs(msgContent, template) {
 	msgContent = msgContent.split(" ").slice(1);
-	let toReturn = {};
+	const toReturn = {};
 
 	for (let arg = 0; arg < msgContent.length; arg++) {
-		let templateArg = Object.keys(template.args)[arg];
+		const templateArg = Object.keys(template.args)[arg];
 		toReturn[templateArg] = msgContent[arg];
 	}
 

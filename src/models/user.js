@@ -19,13 +19,13 @@ class User {
 	 * @memberof User
 	 */
 	async save() {
-		let db = database.get(userCollection);
+		const db = database.get(userCollection);
 		if (!db) {
 			return;
 		}
 
 		try {
-			let channel = this._msg.channel;
+			const channel = this._msg.channel;
 			await db.updateOne(
 				{_id:this.getId()},
 				{
@@ -65,13 +65,13 @@ class User {
 				command
 			);
 		}
-		let db = database.get(adminCollection);
+		const db = database.get(adminCollection);
 		if (!db) {
 			return;
 		}
 
 		try {
-			let channel = this._msg.channel;
+			const channel = this._msg.channel;
 			await db.updateOne(
 				{_id:this.getId()},
 				{
@@ -113,8 +113,7 @@ class User {
 	 * @memberof User
 	 */
 	isAdmin() {
-		let id = this.getId();
-		return id.includes(config.admins);
+		return this.getId().includes(config.admins);
 	}
 }
 

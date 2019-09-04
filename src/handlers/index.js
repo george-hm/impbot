@@ -1,6 +1,9 @@
+import message from "./message.js";
+import interval from "./interval.js";
+
 const handlers = {
-    message: require(__dirname + "/message.js"),
-    interval: require(__dirname + "/interval.js")
+    message: message,
+    interval: interval
 };
 
-module.exports = handlers;
+export default handlers;

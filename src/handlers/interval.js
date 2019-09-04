@@ -1,38 +1,45 @@
-const fs = require("fs");
-const commandList = require(__dirname + "/../commands");
-const templates = JSON.parse(fs.readFileSync(__dirname + "/../command_list.json", "utf8"));
+import fs from "fs";
+import commandList from "../commands";
+const templates = JSON.parse(fs.readFileSync(__dirname + "/../configs/command_list.json", "utf8"));
+const config = JSON.parse(fs.readFileSync(__dirname + "/../configs/config.json"));
 
-module.exports = async bot => {
-	let cache = bot.cache;
-	let toLookup = [];
+export default async bot => {
+	const cache = bot.cache;
+	const context = {
+		hm_data: config.hm_data
+	};
 
-	// fetch commands to lookup if not in cache
-	for (let i = 0; i < templates.length; i++) {
-		const templateData = templates[i];
-		const name = templateData.name;
-		if (templateData.on != "interval" || checkCache(cache, name)) {
+	if (!Object.keys(cache).length) {
+		populateCache(cache);
+	}
+
+	for (const key in cache) {
+		const com = cache[key];
+		const runTime = Date.now() / 1000;
+		if ((com.last_run - runTime) < com.interval) {
 			continue;
 		}
 
-		toLookup.push(name);
+		context.last_run = runTime;
+		commandList[key].main(context);
+		cache[key].last_run = Date.now()/1000;
 	}
-
-
 };
 
 /**
- * Looks at the cache, and returns data from it (or undefined)
+ * Populates the cache, with all interval commands
  *
- * @param {Object} cache    The cache
- * @param {String} toFetch  What to get from the cache
- * @returns 				Either cache data or undefined
+ * @param {Object} cache Cache to populate
  */
-function checkCache(cache, toFetch) {
-	for (let i = 0; i < cache.length; i++) {
-		const cacheData = cache[i];
-		if (cacheData.name === toFetch) {
-			return cacheData;
+function populateCache(cache) {
+	for (let i = 0; i < templates.length; i++) {
+		const currentTemplate = templates[i];
+		if (currentTemplate.on != "interval") {
+			continue;
 		}
+		cache[currentTemplate.name] = {
+			interval: currentTemplate.inveral,
+			last_run: 0
+		};
 	}
-	return undefined;
 }

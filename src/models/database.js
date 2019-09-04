@@ -33,7 +33,7 @@ class Database {
 	 */
 	static get(colName) {
 		if (!this._db) {
-			return undefined;
+			return null;
 		}
 		return this._db.db(this._dbName).collection(colName);
 	}
