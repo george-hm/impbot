@@ -1,6 +1,11 @@
 import axios from "axios";
 
-const main = async (context) => {
+/**
+ * Send a message to a channel in hackmud
+ *
+ * @param {*} context
+ */
+const main = async context => {
     if (
         !context.username ||
         !context.channel ||
@@ -25,15 +30,7 @@ const main = async (context) => {
                 }
             }
         );
-
-        return true;
     } catch (err) {
-        console.log({
-            chat_token: context.chat_token,
-            username: context.username,
-            channel: context.channel,
-            msg: context.hmsg
-        });
         context.msg.reply(
             "Something went wrong. Response from hackmud: \n```js\n" +
             JSON.stringify(err.response.data, null, 2) +
