@@ -4,7 +4,7 @@ import "core-js";
 
 import {Client, SnowflakeUtil} from "discord.js";
 import fs from "fs";
-import handler from "./handler.js";
+import handlers from "./handlers";
 import database from "./models/database.js";
 import User from "./models/user.js";
 const bot = new Client();
@@ -25,7 +25,6 @@ database.connect(
 bot.on("ready", () => {
 	console.log("logged in as " + bot.user.tag);
 
-	// pass snowflake util to bot, a command uses this
 	bot.snowflake = SnowflakeUtil;
 	bot.cache = {};
 
@@ -36,16 +35,14 @@ bot.on("ready", () => {
 bot.on("message", msg => {
 	//TODO: welcome users, config for guilds and messages
 
-	// ignore everything coming from a bot
 	if (msg.author.bot) {
 		return;
 	}
 
-	// create user class (for checks and logging data to db)
+	// save user data to db
 	bot.discordUser = new User(msg);
 	bot.discordUser.save();
 
-	// console log if someone is dming the bot
 	if (msg.channel.type == "dm") {
 		console.log(
 			bot.discordUser.getUsername() + "#" +
@@ -62,8 +59,6 @@ bot.on("message", msg => {
 // every X seconds run this
 setTimeout(config.check_time).then(async () => {
 	const successfulRun = await handlers.interval(bot);
-
 });
 
-// log the bot in using our token
 bot.login(config.bot_token);
