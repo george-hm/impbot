@@ -90,7 +90,7 @@
 			"hackmudchat",
 			"sendhackmud"
 		],
-		"name": "hsend",
+		"name": "hackmud_send_chat",
 		"desc": "Send a message to hackmud channel",
 		"admin": false,
 		"args": {
@@ -102,7 +102,7 @@
 	"hackmud_chats": {
 		"on": "interval",
 		"interval": 5000,
-		"name": "hackmud_chats",
+		"name": "hackmud_monitor_chat",
 		"desc": "Periodically logs hackmud messages from in-game"
 	}
 }
